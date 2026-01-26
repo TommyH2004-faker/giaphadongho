@@ -17,3 +17,4 @@ D:\GiaPhaDongHo\GiaPha_Infrastructure\obj\Debug\net8.0\refint\GiaPha_Infrastruct
 D:\GiaPhaDongHo\GiaPha_Infrastructure\obj\Debug\net8.0\GiaPha_Infrastructure.pdb
 D:\GiaPhaDongHo\GiaPha_Infrastructure\obj\Debug\net8.0\GiaPha_Infrastructure.genruntimeconfig.cache
 D:\GiaPhaDongHo\GiaPha_Infrastructure\obj\Debug\net8.0\ref\GiaPha_Infrastructure.dll
+D:\GiaPhaDongHo\GiaPha_Infrastructure\obj\Debug\net8.0\GiaPha_Infrastructure.sourcelink.json

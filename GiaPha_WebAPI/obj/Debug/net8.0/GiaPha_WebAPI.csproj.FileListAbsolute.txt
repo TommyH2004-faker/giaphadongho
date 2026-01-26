@@ -13,7 +13,6 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\FluentValidation.DependencyInject
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Humanizer.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\MediatR.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\MediatR.Contracts.dll
-D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.Build.Locator.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
@@ -155,3 +154,4 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\refint\GiaPha_WebAPI.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.pdb
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.genruntimeconfig.cache
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\ref\GiaPha_WebAPI.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.sourcelink.json

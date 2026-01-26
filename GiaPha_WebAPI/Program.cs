@@ -1,5 +1,9 @@
+using Microsoft.OpenApi.Models;
 using FluentValidation;
+using GiaPha_Application.Features.HoName.Command.CreateHo;
+using GiaPha_Application.Repository;
 using GiaPha_Infrastructure.Db;
+using GiaPha_Infrastructure.Repository;
 using GiaPha_WebAPI.Filters;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,55 +11,88 @@ using TodoApp.Application.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cấu hình mysql connection
-
-var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DbGiaPha>(
-    dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, serverVersion)
-        .LogTo(Console.WriteLine, LogLevel.Information)
-        .EnableSensitiveDataLogging()
-        .EnableDetailedErrors()
-);
-
-
-builder.Services.AddAuthorization();
-//  MediatR - CQRS Pattern + Domain Events
-// ở đây đăng ký các handlers từ assembly Application 
-// nó sẽ tự đăng ký tất cả các command, query handlers VÀ event handlers
-
-
-//  FluentValidation
-// Tự động đăng ký tất cả các validator từ assembly Application
-// builder.Services.AddValidatorsFromAssembly(typeof(TodoApp.Application.Features.BookHandle.Command.CreateBookCommand).Assembly);
-
-// Add GlobalFilters and Services to the container.
+#region Controllers + Filters
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<GlobalExceptionFilter>();
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+#endregion
 
-// Add services to the container.
+
+#region Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "GiaPha API",
+        Version = "v1"
+    });
+});
+#endregion
+
+#region Database
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<DbGiaPha>(options =>
+{
+    options.UseMySql(
+        connectionString,
+        new MySqlServerVersion(new Version(8, 0, 29))
+    );
+});
+#endregion
+
+#region Repositories
+builder.Services.AddScoped<IHoRepository, HoRepository>();
+#endregion
+
+#region MediatR + Pipeline + Validation
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(CreateHoCommand).Assembly);
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+});
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreateHoCommand).Assembly);
+#endregion
+
+#region CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendApp", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+#endregion
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+#region Middleware Pipeline
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "GiaPha API v1");
+    });
 }
 
-
 app.UseHttpsRedirection();
-app.UseAuthentication();
+
+app.UseCors("AllowFrontendApp");
+
 app.UseAuthorization();
 
-app.Run();
+app.MapControllers();
 
+#endregion
+
+app.Run();

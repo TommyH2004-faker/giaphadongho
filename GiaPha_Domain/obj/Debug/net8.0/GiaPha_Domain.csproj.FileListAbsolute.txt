@@ -9,3 +9,4 @@ D:\GiaPhaDongHo\GiaPha_Domain\obj\Debug\net8.0\GiaPha_Domain.dll
 D:\GiaPhaDongHo\GiaPha_Domain\obj\Debug\net8.0\refint\GiaPha_Domain.dll
 D:\GiaPhaDongHo\GiaPha_Domain\obj\Debug\net8.0\GiaPha_Domain.pdb
 D:\GiaPhaDongHo\GiaPha_Domain\obj\Debug\net8.0\ref\GiaPha_Domain.dll
+D:\GiaPhaDongHo\GiaPha_Domain\obj\Debug\net8.0\GiaPha_Domain.sourcelink.json

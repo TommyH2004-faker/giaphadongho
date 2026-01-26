@@ -13,3 +13,4 @@ D:\GiaPhaDongHo\GiaPha_Application\obj\Debug\net8.0\GiaPha_Application.dll
 D:\GiaPhaDongHo\GiaPha_Application\obj\Debug\net8.0\refint\GiaPha_Application.dll
 D:\GiaPhaDongHo\GiaPha_Application\obj\Debug\net8.0\GiaPha_Application.pdb
 D:\GiaPhaDongHo\GiaPha_Application\obj\Debug\net8.0\ref\GiaPha_Application.dll
+D:\GiaPhaDongHo\GiaPha_Application\obj\Debug\net8.0\GiaPha_Application.sourcelink.json

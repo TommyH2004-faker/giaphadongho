@@ -68,11 +68,7 @@
             },
             "MediatR": {
               "target": "Package",
-              "version": "[11.1.0, )"
-            },
-            "MediatR.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[11.1.0, )"
+              "version": "[14.0.0, )"
             }
           },
           "imports": [
@@ -327,7 +323,7 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[10.1.0, )"
+              "version": "[6.5.0, )"
             }
           },
           "imports": [

@@ -1,4 +1,5 @@
 # API 
+dotnet add package Swashbuckle.AspNetCore
 
 dotnet add package FluentValidation
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer

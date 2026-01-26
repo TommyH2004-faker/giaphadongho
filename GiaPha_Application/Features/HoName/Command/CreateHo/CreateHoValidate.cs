@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace GiaPha_Application.Features.Ho.Command.CreateHo;
+namespace GiaPha_Application.Features.HoName.Command.CreateHo;
 public class CreateHoValidate : AbstractValidator<CreateHoCommand>
 {
     public CreateHoValidate()
