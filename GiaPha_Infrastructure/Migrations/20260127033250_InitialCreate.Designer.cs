@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GiaPha_Infrastructure.Migrations
 {
     [DbContext(typeof(DbGiaPha))]
-    [Migration("20260126043003_InitialCreate")]
+    [Migration("20260127033250_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -29,7 +29,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -56,7 +57,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("Action")
                         .IsRequired()
@@ -89,9 +91,10 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
-                    b.Property<Guid?>("HoId")
+                    b.Property<Guid>("IdHo")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("MoTa")
@@ -102,12 +105,12 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<Guid>("TruongChiId")
+                    b.Property<Guid?>("TruongChiId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HoId");
+                    b.HasIndex("IdHo");
 
                     b.HasIndex("TruongChiId");
 
@@ -118,7 +121,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -147,7 +151,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("MoTa")
                         .HasColumnType("longtext");
@@ -166,7 +171,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<Guid>("ChongId")
                         .HasColumnType("char(36)");
@@ -196,7 +202,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -222,7 +229,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<Guid>("ChaMeId")
                         .HasColumnType("char(36)");
@@ -248,7 +256,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("DiaDiem")
                         .HasColumnType("longtext");
@@ -278,7 +287,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -311,7 +321,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("DuongDan")
                         .IsRequired()
@@ -342,7 +353,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("MoTa")
                         .HasColumnType("longtext");
@@ -369,7 +381,8 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("(UUID())");
 
                     b.Property<string>("AnhDaiDien")
                         .HasColumnType("longtext");
@@ -414,16 +427,18 @@ namespace GiaPha_Infrastructure.Migrations
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ChiHo", b =>
                 {
-                    b.HasOne("GiaPha_Domain.Entities.Ho", null)
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
                         .WithMany("CacChiHo")
-                        .HasForeignKey("HoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdHo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GiaPha_Domain.Entities.ThanhVien", "TruongChi")
                         .WithMany()
                         .HasForeignKey("TruongChiId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Ho");
 
                     b.Navigation("TruongChi");
                 });

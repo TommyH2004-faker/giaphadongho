@@ -155,3 +155,6 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.pdb
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.genruntimeconfig.cache
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\ref\GiaPha_WebAPI.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.sourcelink.json
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

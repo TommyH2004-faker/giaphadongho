@@ -2,7 +2,8 @@
 dotnet add package Swashbuckle.AspNetCore
 
 dotnet add package FluentValidation
-dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.0
+
 dotnet add package Microsoft.EntityFrameworkCore.Design --version 8.0.0
 
 dotnet add package Swashbuckle.AspNetCore
@@ -36,6 +37,7 @@ dotnet add GiaPha_WebAPI reference GiaPha_Infrastructure
 dotnet ef migrations remove --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add InitialCreate --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabase --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseNew --startup-project ../GiaPha_WebAPI
 dotnet ef database update --startup-project ../GiaPha_WebAPI
 # chuyển hết về net 8.0 rồi sau đó chạy 
 dotnet clean

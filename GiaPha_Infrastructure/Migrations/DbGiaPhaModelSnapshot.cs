@@ -91,7 +91,7 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasDefaultValueSql("(UUID())");
 
-                    b.Property<Guid?>("HoId")
+                    b.Property<Guid>("IdHo")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("MoTa")
@@ -107,7 +107,7 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HoId");
+                    b.HasIndex("IdHo");
 
                     b.HasIndex("TruongChiId");
 
@@ -287,10 +287,19 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasDefaultValueSql("(UUID())");
 
+                    b.Property<string>("ActivationCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("Enabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("GioiTinh")
                         .HasColumnType("int");
@@ -298,6 +307,13 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<string>("MatKhauMaHoa")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -424,15 +440,18 @@ namespace GiaPha_Infrastructure.Migrations
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ChiHo", b =>
                 {
-                    b.HasOne("GiaPha_Domain.Entities.Ho", null)
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
                         .WithMany("CacChiHo")
-                        .HasForeignKey("HoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdHo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GiaPha_Domain.Entities.ThanhVien", "TruongChi")
                         .WithMany()
                         .HasForeignKey("TruongChiId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Ho");
 
                     b.Navigation("TruongChi");
                 });

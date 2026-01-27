@@ -1,12 +1,13 @@
 
-using GiaPha_Application.DTOs;
 using GiaPha_Application.Features.HoName.Command.CreateHo;
+using GiaPha_Application.Features.HoName.Command.DeleteHo;
 using GiaPha_Application.Features.HoName.Command.UpdateHo;
 using GiaPha_Application.Features.HoName.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static GiaPha_WebAPI.Controller.ControllerHo.RequestHo;
 
-namespace GiaPha_WebAPI.Controller;
+namespace GiaPha_WebAPI.Controller.ControllerHo;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -17,13 +18,6 @@ public class HoController : ControllerBase
     {
         _mediator = mediator;
     }
-
-    public class CreateHoRequest
-    {
-        public string TenHo { get; set; } = null!;
-        public string? MoTa { get; set; }
-    }
-
     [HttpPost]
     public async Task<IActionResult> CreateHo([FromBody] CreateHoRequest request)
     {
@@ -36,13 +30,15 @@ public class HoController : ControllerBase
         return Ok(result);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateHo(Guid id, [FromBody] UpdateHoCommand request)
+    public async Task<IActionResult> UpdateHo(Guid id, [FromBody] UpdateHoRequest request)
     {
-        if (id != request.Id)
+        var command = new UpdateHoCommand
         {
-            return BadRequest("ID in URL does not match ID in request body.");
-        }
-        var result = await _mediator.Send(request);
+            Id = id,
+            TenHo = request.TenHo,
+            MoTa = request.MoTa
+        };
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
     [HttpGet("{id}")]
@@ -52,4 +48,18 @@ public class HoController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteHo(Guid id)
+    {
+        var command = new DeleteHoCommand { Id = id };
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetAllHo()
+    {
+        var query = new GiaPha_Application.Features.HoName.Queries.GetAllHo.GetAllHoQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+}   

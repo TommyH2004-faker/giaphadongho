@@ -24,6 +24,8 @@ public class Result<T>
 
     public static Result<T> Success(T data)
         => new(true, data, null, string.Empty);
+    public static Result<T> Success(T data, string message)
+    => new(true, data, null, message);
 
     public static Result<T> Failure(
         ErrorType errorType,

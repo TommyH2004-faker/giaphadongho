@@ -13,13 +13,19 @@ public class ChiHoConfiguration : IEntityTypeConfiguration<ChiHo>
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
         builder.Property(x => x.TenChiHo).IsRequired().HasMaxLength(255);
-        builder.HasOne(x => x.TruongChi)
-               .WithMany()
-               .HasForeignKey(x => x.TruongChiId)
-               .OnDelete(DeleteBehavior.Restrict);
-        builder.HasMany(x => x.ThanhViens)
-               .WithOne(x => x.ChiHo)
-               .HasForeignKey(x => x.ChiHoId)
-               .OnDelete(DeleteBehavior.SetNull);
+         builder.HasOne(x => x.Ho)
+             .WithMany(x => x.CacChiHo)
+             .HasForeignKey(x => x.IdHo)
+             .OnDelete(DeleteBehavior.Cascade);
+
+         builder.HasOne(x => x.TruongChi)
+             .WithMany()
+             .HasForeignKey(x => x.TruongChiId)
+             .OnDelete(DeleteBehavior.Restrict);
+
+         builder.HasMany(x => x.ThanhViens)
+             .WithOne(x => x.ChiHo)
+             .HasForeignKey(x => x.ChiHoId)
+             .OnDelete(DeleteBehavior.SetNull);
     }
 }

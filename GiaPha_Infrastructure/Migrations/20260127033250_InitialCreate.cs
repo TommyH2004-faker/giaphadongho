@@ -18,7 +18,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "Albums",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     TenAlbum = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ThanhVienId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
@@ -35,7 +35,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "AuditLogs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     EntityName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EntityId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -57,7 +57,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     NoiDung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ThanhVienId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
@@ -75,7 +75,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "Hos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     TenHo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MoTa = table.Column<string>(type: "longtext", nullable: true)
@@ -91,7 +91,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     NoiDung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NguoiNhanId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
@@ -108,7 +108,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "TaiKhoanNguoiDungs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     TenDangNhap = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MatKhauMaHoa = table.Column<string>(type: "longtext", nullable: false)
@@ -129,7 +129,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "TepTins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     DuongDan = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LoaiTep = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
@@ -155,20 +155,20 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "ChiHos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     TenChiHo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MoTa = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TruongChiId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    HoId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                    IdHo = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TruongChiId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChiHos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChiHos_Hos_HoId",
-                        column: x => x.HoId,
+                        name: "FK_ChiHos_Hos_IdHo",
+                        column: x => x.IdHo,
                         principalTable: "Hos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -179,7 +179,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "ThanhViens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     HoTen = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GioiTinh = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
@@ -213,7 +213,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "HonNhans",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     ChongId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     VoId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     NgayKetHon = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -243,7 +243,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "QuanHeChaCons",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     ChaMeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ConId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     LoaiQuanHe = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
@@ -271,7 +271,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "SuKiens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     ThanhVienId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     LoaiSuKien = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -297,7 +297,7 @@ namespace GiaPha_Infrastructure.Migrations
                 name: "ThanhTuu",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "(UUID())", collation: "ascii_general_ci"),
                     ThanhVienId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     TenThanhTuu = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -318,9 +318,9 @@ namespace GiaPha_Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChiHos_HoId",
+                name: "IX_ChiHos_IdHo",
                 table: "ChiHos",
-                column: "HoId");
+                column: "IdHo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChiHos_TruongChiId",
@@ -380,7 +380,7 @@ namespace GiaPha_Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ChiHos_Hos_HoId",
+                name: "FK_ChiHos_Hos_IdHo",
                 table: "ChiHos");
 
             migrationBuilder.DropForeignKey(

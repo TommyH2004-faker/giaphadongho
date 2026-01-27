@@ -27,8 +27,5 @@ public class Ho
             TenHo = tenHo;
             MoTa = moTa;
         }
-    public void Delete( Guid id)
-    {
-    }
    
 }

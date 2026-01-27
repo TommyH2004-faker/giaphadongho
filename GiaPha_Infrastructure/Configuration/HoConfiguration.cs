@@ -13,8 +13,9 @@ public class HoConfiguration : IEntityTypeConfiguration<Ho>
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
         builder.Property(x => x.TenHo).IsRequired().HasMaxLength(255);
-        builder.HasMany(x => x.CacChiHo)
-               .WithOne()
-               .OnDelete(DeleteBehavior.Cascade);
+         builder.HasMany(x => x.CacChiHo)
+             .WithOne(x => x.Ho)
+             .HasForeignKey(x => x.IdHo)
+             .OnDelete(DeleteBehavior.Cascade);
     }
 }
