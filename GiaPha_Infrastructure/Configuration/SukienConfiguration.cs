@@ -11,7 +11,9 @@ public class SuKienConfiguration : IEntityTypeConfiguration<SuKien>
          builder.Property(x => x.Id)
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
-        builder.Property(x => x.LoaiSuKien).IsRequired().HasMaxLength(100);
+         builder.Property(x => x.LoaiSuKien)
+             .IsRequired()
+             .HasConversion<int>();
         builder.HasOne(x => x.ThanhVien)
                .WithMany()
                .HasForeignKey(x => x.ThanhVienId)

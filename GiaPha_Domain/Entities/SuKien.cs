@@ -1,3 +1,5 @@
+using GiaPha_Domain.Enums;
+
 namespace GiaPha_Domain.Entities;
 public class SuKien
 {
@@ -6,7 +8,7 @@ public class SuKien
     public Guid ThanhVienId { get; private set; }
     public ThanhVien ThanhVien { get; private set; } = null!;
 
-    public string LoaiSuKien { get; private set; } = null!;
+    public LoaiSuKien LoaiSuKien { get; private set; }
     // Sinh, Mat, Cuoi, ThanhTuu...
 
     public DateTime? NgayXayRa { get; private set; }

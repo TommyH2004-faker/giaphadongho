@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GiaPha_WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5c1263cc5b87aa040291bf98c1a1c09cab79fce")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c57a01f4cfc97bc4513d18ee54147ef6a258edde")]
 [assembly: System.Reflection.AssemblyProductAttribute("GiaPha_WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GiaPha_WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

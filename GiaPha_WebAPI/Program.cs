@@ -13,6 +13,7 @@ using GiaPha_Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TodoApp.Application.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,9 @@ builder.Services.AddDbContext<DbGiaPha>(options =>
 builder.Services.AddScoped<IHoRepository, HoRepository>();
 builder.Services.AddScoped<IChiHoRepository, ChiHoRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IThanhVienRepository, ThanhVienRepository>();
+builder.Services.AddScoped<IAuditLogRepository, AuditReopository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 #endregion
 
 #region MediatR + Pipeline + Validation
@@ -65,6 +69,9 @@ builder.Services.AddValidatorsFromAssembly(typeof(CreateHoCommand).Assembly);
 #endregion
 //  JWT Service
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+builder.Services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
 
 //  JWT Authentication
 builder.Services.AddAuthentication(options =>

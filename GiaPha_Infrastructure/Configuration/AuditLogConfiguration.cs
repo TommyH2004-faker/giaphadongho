@@ -12,8 +12,12 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
          builder.Property(x => x.Id)
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
-        builder.Property(x => x.EntityName).IsRequired().HasMaxLength(255);
-        builder.Property(x => x.Action).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.ChangedAt).IsRequired();
+            builder.Property(x => x.EntityName).IsRequired();
+            builder.Property(x => x.EntityId).IsRequired();
+            builder.Property(x => x.Action).IsRequired();
+            builder.Property(x => x.ChangedAt).IsRequired();
+            builder.Property(x => x.ChangedBy).IsRequired(false);
+            builder.Property(x => x.OldValues).IsRequired(false);
+            builder.Property(x => x.NewValues).IsRequired(false);
     }
 }

@@ -1,4 +1,5 @@
 
+
 namespace GiaPha_Application.Common;
 public class Result<T>
 {
@@ -32,4 +33,5 @@ public class Result<T>
         string message,
         List<string>? errors = null)
         => new(false, default, errorType, message, errors);
+
 }

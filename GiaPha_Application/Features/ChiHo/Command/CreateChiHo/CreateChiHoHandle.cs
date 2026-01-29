@@ -20,13 +20,17 @@ public class CreateChiHoHandle : IRequestHandler<CreateChiHoCommand, Result<ChiH
         }
         var chiHo = GiaPha_Domain.Entities.ChiHo.Create(request.TenChiHo, request.IdHo, request.MoTa);
         var createdChiHo = await _chiHoRepository.CreateChiHoAsync(chiHo);
-
+        if (createdChiHo == null)
+        {
+            return Result<ChiHoResponse>.Failure(ErrorType.Failure, "Tạo Chi Họ thất bại");
+        }
+        var data = createdChiHo?.Data;
         var chiHoResponse = new ChiHoResponse
         {
-            Id = createdChiHo?.Id ?? Guid.Empty,
+            Id = data?.Id ?? Guid.Empty,
             IdHo = request.IdHo,
-            TenChiHo = createdChiHo?.TenChiHo,
-            MoTa = createdChiHo?.MoTa,
+            TenChiHo = data?.TenChiHo,
+            MoTa = data?.MoTa,
             TruongChiId = null // Mặc định là null khi tạo mới
         };
 

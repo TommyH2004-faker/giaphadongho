@@ -1,7 +1,9 @@
+using GiaPha_Domain.Common;
 using GiaPha_Domain.Enums;
+using static GiaPha_Domain.Events.UserEvents;
 
 namespace GiaPha_Domain.Entities;
-public class TaiKhoanNguoiDung
+public class TaiKhoanNguoiDung :IHasDomainEvents
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
 
@@ -15,13 +17,18 @@ public class TaiKhoanNguoiDung
     public bool Enabled { get; private set; } 
     public DateTime? RefreshTokenExpiry { get; private set; }
     public string? RefreshToken { get; private set; }
+
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => DomainEventsInternal.AsReadOnly();
+    private List<IDomainEvent> DomainEventsInternal { get; } = new List<IDomainEvent>();
+
     private TaiKhoanNguoiDung() { }
 
      public static TaiKhoanNguoiDung Register(
         string TenDangNhap,
         string email,
         string MatKhauMaHoa,
-        string role = "User")
+        GioiTinh gioiTinh,
+        string role)
         {
             if (string.IsNullOrWhiteSpace(TenDangNhap))
                 throw new ArgumentException("TenDangNhap is required");
@@ -40,13 +47,22 @@ public class TaiKhoanNguoiDung
                 TenDangNhap = TenDangNhap,
                 Email = email,
                 MatKhauMaHoa = MatKhauMaHoa,
+                GioiTinh = gioiTinh,
                 Role = role,
                 ActivationCode = activationCode,
                 Enabled = false
             };
             return user;
         }
-
+         public void RaiseRegisteredEvent()
+        {
+            AddDomainEvent(new UserRegistered(
+                this.Id,
+                this.Email,
+                this.TenDangNhap,
+                this.ActivationCode!
+            ));
+        }
       
         public void ChangePassword(string newPasswordHash)
         {
@@ -56,8 +72,6 @@ public class TaiKhoanNguoiDung
             MatKhauMaHoa = newPasswordHash;
         }
 
-  
-
         public void Activate()
         {
             if (Enabled)
@@ -65,7 +79,11 @@ public class TaiKhoanNguoiDung
             
             Enabled = true;
             ActivationCode = null;
-        
+            AddDomainEvent(new UserActivated(
+                this.Id,
+                this.Email,
+                DateTime.UtcNow
+            ));
         }
 
         public void ChangeRole(string role)
@@ -81,5 +99,45 @@ public class TaiKhoanNguoiDung
     
             this.RefreshToken = refreshToken;
             this.RefreshTokenExpiry = refreshTokenExpiry;
+        }
+
+        public void AddDomainEvent(IDomainEvent domainEvent)
+        {
+            DomainEventsInternal.Add(domainEvent);
+        }
+
+        public void RemoveDomainEvent(IDomainEvent domainEvent)
+        {
+            DomainEventsInternal.Remove(domainEvent);
+        }
+
+        public void ClearDomainEvents()
+        {
+            DomainEventsInternal.Clear();
+        }
+
+        public void RaisePasswordChangedEvent()
+        {
+            AddDomainEvent(new UserPasswordChanged(
+                this.Id,
+                this.Email,
+                DateTime.UtcNow
+            ));
+        }
+        public void ForgotPassword(string newPasswordHash)
+        {
+            if (string.IsNullOrWhiteSpace(newPasswordHash))
+                throw new ArgumentException("New password hash required");
+
+            MatKhauMaHoa = newPasswordHash;
+        }
+        public void RaiseForgotPasswordEvent(string plainPassword)
+        {
+            AddDomainEvent(new UserForgotPassword(
+                this.Id,
+                this.Email,
+                plainPassword,
+                DateTime.UtcNow
+            ));
         }
 }

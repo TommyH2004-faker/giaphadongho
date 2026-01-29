@@ -24,18 +24,23 @@ public class UpdateHoHandle : IRequestHandler<UpdateHoCommand, Result<HoResponse
 
         // Kiểm tra trùng tên với họ khác
         var hoTrungTen = await _hoRepository.GetHoByNameAsync(request.TenHo);
-        if (hoTrungTen != null && hoTrungTen.Id != ho.Id)
+
+        if (hoTrungTen != null && hoTrungTen.Data != null && ho.Data != null && hoTrungTen.Data.Id != ho.Data.Id)
         {
             return Result<HoResponse>.Failure(ErrorType.Conflict, "Tên họ đã tồn tại");
         }
 
         // Cập nhật thông tin
-        ho.Update(request.TenHo, request.MoTa);
-        var updatedHo = await _hoRepository.UpdateHoAsync(ho);
-        if (updatedHo == null)
+        if (ho.Data == null)
+        {
+            return Result<HoResponse>.Failure(ErrorType.NotFound, "Dữ liệu Họ không tồn tại");
+        }
+        ho.Data.Update(request.TenHo, request.MoTa);
+        var updatedHo = await _hoRepository.UpdateHoAsync(ho.Data);
+        if (updatedHo == null || updatedHo.Data == null)
         {
             return Result<HoResponse>.Failure(ErrorType.Failure, "Cập nhật Họ thất bại");
         }
-        return Result<HoResponse>.Success(new HoResponse { TenHo = updatedHo.TenHo, MoTa = updatedHo.MoTa });
+        return Result<HoResponse>.Success(new HoResponse { TenHo = updatedHo.Data.TenHo, MoTa = updatedHo.Data.MoTa });
     }
 }

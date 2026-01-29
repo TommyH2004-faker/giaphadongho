@@ -16,8 +16,8 @@ public class TaiKhoanNguoiDungConfiguration : IEntityTypeConfiguration<TaiKhoanN
         builder.Property(x => x.MatKhauMaHoa).IsRequired();
         builder.Property(x => x.Email).IsRequired().HasMaxLength(255);
         builder.Property(x => x.Role).IsRequired().HasMaxLength(50);
-        // khong bat buoc 
-        builder.Property(x => x.GioiTinh);
+        // cot gioi tinh chỉ nhận số để dùng enums
+        builder.Property(x => x.GioiTinh).HasConversion<int>();
         builder.Property(x => x.ActivationCode).HasMaxLength(100);
         builder.Property(x => x.Enabled).HasDefaultValue(false);
         builder.Property(x => x.RefreshToken).HasMaxLength(500);

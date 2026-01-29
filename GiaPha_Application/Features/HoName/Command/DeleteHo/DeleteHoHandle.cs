@@ -29,7 +29,7 @@ public class DeleteHoHandle
 
         var deleted = await _hoRepository.DeleteHoAsync(request.Id);
 
-        if (!deleted)
+        if (!deleted.Data)
         {
             return Result<HoResponse>.Failure(
                 ErrorType.Failure,
@@ -37,13 +37,21 @@ public class DeleteHoHandle
             );
         }
 
+        if (ho.Data == null)
+        {
+            return Result<HoResponse>.Failure(
+                ErrorType.Failure,
+                "Dữ liệu họ không hợp lệ"
+            );
+        }
+
         return Result<HoResponse>.Success(
             new HoResponse
             {
-                TenHo = ho.TenHo,
-                MoTa = ho.MoTa
+                TenHo = ho.Data.TenHo,
+                MoTa = ho.Data.MoTa
             },
-            $"Đã xóa thành công họ: {ho.TenHo}"
+            $"Đã xóa thành công họ: {ho.Data.TenHo}"
         );
     }
 }

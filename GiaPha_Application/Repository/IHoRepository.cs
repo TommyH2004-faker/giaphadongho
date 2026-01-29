@@ -5,10 +5,10 @@ using GiaPha_Domain.Entities;
 namespace GiaPha_Application.Repository;
 public interface IHoRepository
 {
-    Task<Ho?> CreateHoAsync(string tenHo, string? moTa);
-    Task<bool> DeleteHoAsync(Guid id);
-    Task<IEnumerable<Ho>> GetAllHoAsync();
-    Task<Ho?> GetHoByIdAsync(Guid hoId);
-    Task<Ho?> GetHoByNameAsync(string tenHo);
-    Task<Ho> UpdateHoAsync(Ho ho);
+    Task<Result<Ho?>> CreateHoAsync(string tenHo, string? moTa);
+    Task<Result<bool>> DeleteHoAsync(Guid id);
+    Task<Result<IEnumerable<Ho>>> GetAllHoAsync();
+    Task<Result<Ho?>> GetHoByIdAsync(Guid hoId);
+    Task<Result<Ho?>> GetHoByNameAsync(string tenHo);
+    Task<Result<Ho>> UpdateHoAsync(Ho ho);
 }

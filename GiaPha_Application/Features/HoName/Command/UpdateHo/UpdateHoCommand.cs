@@ -3,7 +3,7 @@ using GiaPha_Application.DTOs;
 using MediatR;
 
 namespace GiaPha_Application.Features.HoName.Command.UpdateHo;
-public record UpdateHoCommand() : IRequest<Result<HoResponse>>
+public record UpdateHoCommand : IRequest<Result<HoResponse>>
 {
     public Guid Id { get; init; }
     public string TenHo { get; init; } = null!;

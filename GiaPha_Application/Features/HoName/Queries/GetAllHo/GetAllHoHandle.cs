@@ -15,7 +15,11 @@ public class GetAllHoHandle : IRequestHandler<GetAllHoQuery, Result<List<HoRespo
     public async Task<Result<List<HoResponse>>> Handle(GetAllHoQuery request, CancellationToken cancellationToken)
     {
         var hos = await _hoRepository.GetAllHoAsync();
-        var hoResponses = hos.Select(h => new HoResponse
+        if (hos == null || hos.Data == null || !hos.Data.Any())
+        {
+            return Result<List<HoResponse>>.Failure(ErrorType.NotFound, "Không có họ nào tồn tại");
+        }
+        var hoResponses = hos.Data.Select(h => new HoResponse
         {
             Id = h.Id,
             TenHo = h.TenHo,

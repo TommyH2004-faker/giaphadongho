@@ -13,8 +13,11 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
         builder.Property(x => x.NoiDung).IsRequired();
-        builder.Property(x => x.CreatedAt)
-               .IsRequired()
-               .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+        builder.Property(x => x.NguoiNhanId).IsRequired(false);
+        builder.Property(x => x.IsGlobal).IsRequired();
+        builder.Property(x => x.CreatedAt).IsRequired();
+        builder.Property(x => x.DaDoc).IsRequired();
+
+
     }
 }

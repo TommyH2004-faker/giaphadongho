@@ -13,6 +13,14 @@ public class AuthRepository : IAuthRepository
     {
         _context = context;
     }
+
+    public async Task<Result<TaiKhoanNguoiDung>> AddUserAsync(TaiKhoanNguoiDung newUser)
+    {
+        _context.TaiKhoanNguoiDungs.Add(newUser);
+        await _context.SaveChangesAsync();
+        return Result<TaiKhoanNguoiDung>.Success(newUser);
+    }
+
     public async Task<Result<TaiKhoanNguoiDung>> CreateUserAsync(TaiKhoanNguoiDung user)
     {
         _context.TaiKhoanNguoiDungs.Add(user);
@@ -44,13 +52,13 @@ public class AuthRepository : IAuthRepository
         return Result<TaiKhoanNguoiDung?>.Success(user);
     }
 
-    public async Task<Result<TaiKhoanNguoiDung?>> GetUserByIdAsync(int id)
+    public async Task<Result<TaiKhoanNguoiDung?>> GetUserByIdAsync(Guid id)
     {
         var user = await _context.TaiKhoanNguoiDungs.FindAsync(id);
         return Result<TaiKhoanNguoiDung?>.Success(user);
     }
 
-    public async Task<Result<TaiKhoanNguoiDung?>> GetUserByUsernameAsync(string TenDangNhap)
+    public async Task<Result<TaiKhoanNguoiDung?>> GetEmailByUsernameAsync(string TenDangNhap)
     {
         var user = await _context.TaiKhoanNguoiDungs.FirstOrDefaultAsync(u => u.TenDangNhap == TenDangNhap);
         return Result<TaiKhoanNguoiDung?>.Success(user);

@@ -38,8 +38,12 @@ dotnet ef migrations remove --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add InitialCreate --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabase --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseNew --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseEnums --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseThanhVien --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseAudit --startup-project ../GiaPha_WebAPI
 dotnet ef database update --startup-project ../GiaPha_WebAPI
 # chuyển hết về net 8.0 rồi sau đó chạy 
 dotnet clean
 dotnet restore
 dotnet build
+dotnet ef migrations add Notification --startup-project ../GiaPha_WebAPI

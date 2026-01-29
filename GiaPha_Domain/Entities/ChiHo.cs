@@ -29,17 +29,20 @@ public class ChiHo
         };
         return chiHo;
     }
-    public void Update(
-        string tenChiHo,
-        string? moTa = null)
-    {
-        if (string.IsNullOrWhiteSpace(tenChiHo))
+    public void Update(string tenChiHo,Guid IdHo,string? moTa = null)
         {
-            throw new ArgumentException("Tên chi họ không được để trống", nameof(tenChiHo));
+            if(string.IsNullOrWhiteSpace(tenChiHo))
+            {
+                throw new ArgumentException("Tên chi họ không được để trống", nameof(tenChiHo));
+            }
+            if(IdHo == Guid.Empty)
+            {
+                throw new ArgumentException("IdHọ không được để trống", nameof(IdHo));
+            }
+            TenChiHo = tenChiHo;
+            MoTa = moTa;
+            this.IdHo = IdHo;
         }
-        TenChiHo = tenChiHo;
-        MoTa = moTa;
-    }
     public void AssignTruongChi(ThanhVien truongChi)
     {
         if (truongChi == null)

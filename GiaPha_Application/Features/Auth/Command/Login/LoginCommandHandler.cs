@@ -3,6 +3,7 @@ using GiaPha_Application.DTOs;
 using GiaPha_Application.Repository;
 using GiaPha_Application.Service;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GiaPha_Application.Features.Auth.Command.Login;
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRespone>>
@@ -16,10 +17,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
     }
     public async Task<Result<LoginRespone>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _authRepository.GetUserByUsernameAsync(request.TenDangNhap);
+        var user = await _authRepository.GetEmailByUsernameAsync(request.TenDangNhap);
         if (!user.IsSuccess)
         {
-            throw new UnauthorizedAccessException("Tên đăng nhập đã tồn tại");
+            throw new UnauthorizedAccessException("Email không tồn tại");
         }
         if (user.Data == null || !user.Data.Enabled)
         {
@@ -50,6 +51,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             TenDangNhap = user.Data.TenDangNhap,
             Email = user.Data.Email,
             Token = token,
+            GioiTinh = user.Data.GioiTinh,
             Role = user.Data.Role,
             MatKhauMaHoa = user.Data.MatKhauMaHoa,
             RefreshTokenExpiry= refreshTokenExpiry

@@ -12,6 +12,6 @@ public class RequestChiHo
         public Guid IdHo { get; set; }
         public string TenChiHo { get; set; } = null!;
         public string? MoTa { get; set; }
-        public Guid? TruongChiId { get; set; }
+        public Guid TruongChiId { get; set; }
     }
 }

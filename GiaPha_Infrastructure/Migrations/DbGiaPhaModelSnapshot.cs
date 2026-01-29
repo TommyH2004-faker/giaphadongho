@@ -59,8 +59,7 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("datetime(6)");
@@ -68,16 +67,18 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<string>("ChangedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Changes")
-                        .HasColumnType("longtext");
-
                     b.Property<Guid>("EntityId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("EntityName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -202,12 +203,16 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasDefaultValueSql("(UUID())");
 
+                    b.Property<Guid?>("ChiHoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("DaDoc")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsGlobal")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<Guid?>("NguoiNhanId")
@@ -259,10 +264,8 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<string>("DiaDiem")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("LoaiSuKien")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<int>("LoaiSuKien")
+                        .HasColumnType("int");
 
                     b.Property<string>("MoTa")
                         .HasColumnType("longtext");
@@ -406,10 +409,13 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<int>("DoiThu")
                         .HasColumnType("int");
 
-                    b.Property<string>("GioiTinh")
+                    b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("GioiTinh")
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<string>("HoTen")
                         .IsRequired()

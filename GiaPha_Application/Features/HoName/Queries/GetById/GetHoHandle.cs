@@ -19,6 +19,10 @@ public class GetHoHandle : IRequestHandler<GetHoByIdQuery, Result<HoResponse>>
         {
             return Result<HoResponse>.Failure(ErrorType.NotFound, "Họ không tồn tại");
         }
-        return Result<HoResponse>.Success(new HoResponse { TenHo = ho.TenHo, MoTa = ho.MoTa });
+        if(ho.Data == null)
+        {
+            return Result<HoResponse>.Failure(ErrorType.NotFound, "Dữ liệu Họ không tồn tại");
+        }
+        return Result<HoResponse>.Success(new HoResponse { TenHo = ho.Data.TenHo, MoTa = ho.Data.MoTa });
     }
 }
