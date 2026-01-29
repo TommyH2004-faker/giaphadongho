@@ -10,6 +10,7 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
     public string TenDangNhap { get; private set; } = null!;
     public string MatKhauMaHoa { get; private set; } = null!;
     public string Email { get; private set; } = null!;
+    public string? Avatar { get; private set; }
     public GioiTinh GioiTinh { get; private set; }
     public string Role { get; private set; } = null!;
     // QuanTri, BienTap, Xem

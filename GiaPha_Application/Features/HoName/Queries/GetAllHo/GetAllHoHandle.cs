@@ -23,7 +23,8 @@ public class GetAllHoHandle : IRequestHandler<GetAllHoQuery, Result<List<HoRespo
         {
             Id = h.Id,
             TenHo = h.TenHo,
-            MoTa = h.MoTa
+            MoTa = h.MoTa,
+            HinhAnh = h.HinhAnh
         }).ToList();
         return Result<List<HoResponse>>.Success(hoResponses);
     }

@@ -13,6 +13,7 @@ public class HoConfiguration : IEntityTypeConfiguration<Ho>
              .HasDefaultValueSql("(UUID())")
              .ValueGeneratedOnAdd();
         builder.Property(x => x.TenHo).IsRequired().HasMaxLength(255);
+        builder.Property(x=>x.HinhAnh);
          builder.HasMany(x => x.CacChiHo)
              .WithOne(x => x.Ho)
              .HasForeignKey(x => x.IdHo)

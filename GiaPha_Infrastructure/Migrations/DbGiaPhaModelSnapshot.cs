@@ -152,6 +152,9 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasDefaultValueSql("(UUID())");
 
+                    b.Property<string>("HinhAnh")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("MoTa")
                         .HasColumnType("longtext");
 
@@ -293,6 +296,9 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<string>("ActivationCode")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .IsRequired()

@@ -41,6 +41,8 @@ dotnet ef migrations add fixDatabaseNew --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseEnums --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseThanhVien --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseAudit --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseHo --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add addAvatar --startup-project ../GiaPha_WebAPI
 dotnet ef database update --startup-project ../GiaPha_WebAPI
 # chuyển hết về net 8.0 rồi sau đó chạy 
 dotnet clean
