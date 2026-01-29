@@ -13,7 +13,6 @@ public class CreateThanhVienEvent : IDomainEventWrapper<ThanhVienCreated>
     IDomainEvent IDomainEventWrapper.DomainEvent => DomainEvent;
     public Guid Id => DomainEvent.Id;
     public string Email => DomainEvent.Email;
-    public string tenChiHo => DomainEvent.tenChiHo;
     public string HoTen => DomainEvent.HoTen;
     public Guid Idho => DomainEvent.Idho;
     public DateTime CreatedAt => DomainEvent.CreatedAt;
