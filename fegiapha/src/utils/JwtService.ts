@@ -28,6 +28,15 @@ export function getAvatarByToken() {
       return decodedToken.avatar;
    }
 }
+export function getLastNameByToken() {
+   const token = localStorage.getItem('token');
+   if (token) {
+      const decodedToken = jwtDecode(token) as JwtPayload;
+      const fullName = decodedToken.sub;
+      const nameParts = fullName.split(" ");
+      return nameParts[nameParts.length - 1];
+   }
+}
 
 export function getUsernameByToken() {
    const token = localStorage.getItem('token');

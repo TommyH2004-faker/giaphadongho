@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GiaPha_Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79ce019f6790204702d18e402fa3a83b04272bb1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30db8516726157fa30f56ae255249d9377cf1de1")]
 [assembly: System.Reflection.AssemblyProductAttribute("GiaPha_Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GiaPha_Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

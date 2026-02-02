@@ -1,91 +1,84 @@
-import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { getAvatarByToken, getRoleByToken, isToken, logout } from "../../utils/JwtService";
-import { Avatar, Button } from "@mui/material";
+import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
+
+import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
 import { useAuth } from "../../utils/AuthContext";
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const {setLoggedIn} = useAuth();
-  return (
-    <nav
-      className="navbar navbar-expand-lg fixed-top"
-      style={{
-        backgroundColor: "#1a1a1a",             // nền tối cổ truyền
-        borderBottom: "1px solid rgba(208,165,57,0.4)",
-      }}
-    >
-      <div
-        className="container d-flex align-items-center justify-content-between"
-        style={{ gap: 24 }}
-      >
+import { getAvatarByToken, getLastNameByToken, getRoleByToken, isToken, logout } from "../../utils/JwtService";
+// interface NavbarProps {
+//     tuKhoaTimKiem: string;
+//     setTuKhoaTimKiem: (tuKhoa: string) => void;
+// }
+function Navbar() {
 
-        {/* Logo */}
-        <div style={{ flex: "0 0 auto" }}>
-          <Link
-            className="navbar-brand d-flex align-items-center p-0 m-0"
-            to="/"
-            style={{ height: "90px" }}
-          >
-            <img
-              src="/logoWeb.png"
-              alt="Logo Nhà Thờ Họ"
-              style={{
-                height: "80px",
-                width: "auto",
-                objectFit: "contain",
-              }}
-            />
-          </Link>
-        </div>
+    const {setLoggedIn} = useAuth();
+    const navigate = useNavigate();
+  
+    const location = useLocation();
+    const adminEndpoint = ["/admin"];
+    if(adminEndpoint.includes(location.pathname)){
+        return null;
+    }
 
-        {/* Menu + Auth */}
-        <div
-          style={{ flex: 1, minWidth: 0 }}
-          className="d-flex flex-column flex-lg-row align-items-center justify-content-end"
-        >
+    return(
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="#">Bookstore</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
 
-          {/* Toggle mobile */}
-          <button
-            className="navbar-toggler align-self-end mb-2 mb-lg-0"
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <NavLink className="nav-link active" aria-current="page" to="/">Trang chủ</NavLink>
+                        </li>
+                        <li className='nav-item'>
+                            <NavLink className='nav-link' to='/about'>
+                                Giới thiệu
+                            </NavLink>
+                        </li>
+                        {/* <li className="nav-item dropdown">
+                            <NavLink className="nav-link dropdown-toggle" to="#" id="navbarDropdown1" role="button"
+                                     data-bs-toggle="dropdown" aria-expanded="false">
+                                Thể loại sách
+                            </NavLink>
+                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                <li><NavLink className="dropdown-item" to="/30">Thể loại 1</NavLink></li>
+                                <li><NavLink className="dropdown-item" to="/32">Thể loại 2</NavLink></li>
+                                <li><NavLink className="dropdown-item" to="/36">Thể loại 3</NavLink></li>
+                            </ul>
+                        </li>*/}
+                        <li className='nav-item dropdown dropdown-hover'>
+                            <a
+                                className='nav-link dropdown-toggle'
+                                href='#'
+                                role='button'
+                                data-bs-toggle='dropdown'
+                                aria-expanded='false'
+                            >
+                                Thể loại
+                            </a>
+                        </li>
+                        <li className='nav-item'>
+                            <Link className='nav-link' to={"/policy"}>
+                                Chính sách
+                            </Link>
+                        </li>
+                        {isToken() && (
+                            <li className='nav-item'>
+                                <NavLink className='nav-link' to={"/feedback"}>
+                                    Feedback
+                                </NavLink>
+                            </li>
+                        )}
+                    </ul>
+                </div>
 
-          {/* Collapse */}
-          <div
-            className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}
-            style={{ width: "100%" }}
-          >
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-
-              {[
-                { to: "/", label: "Trang chủ" },
-                { to: "/gioi-thieu", label: "Giới thiệu" },
-                { to: "/gia-pha", label: "Gia phả" },
-                { to: "/so-do-pha-he", label: "Sơ đồ phả hệ" },
-                { to: "/lien-he", label: "Liên hệ" },
-              ].map((item) => (
-                <li className="nav-item" key={item.to}>
-                  <NavLink
-                    to={item.to}
-                    className="nav-link"
-                    style={({ isActive }) => ({
-                      color: isActive ? "#d0a539" : "white",
-                      fontWeight: 500,
-                    })}
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-
-            </ul>
-
-            {/* Auth */}
-          {/* Biểu tượng đăng nhập */}
+               
+               
+                {/* Biểu tượng đăng nhập */}
                 {!isToken() && (
                     <div>
                         <Link to={"/dangnhap"}>
@@ -145,7 +138,8 @@ export default function Navbar() {
                                 aria-expanded='false'
                             >
                                 <Avatar
-                                    style={{fontSize: "14px"}}            
+                                    style={{fontSize: "14px"}}
+                                    alt={getLastNameByToken()?.toUpperCase()}
                                     src={getAvatarByToken()}
                                     sx={{width: 30, height: 30}}
                                 />
@@ -182,8 +176,10 @@ export default function Navbar() {
                                         className='dropdown-item'
                                         style={{cursor: "pointer"}}
                                         onClick={() => {
+                                    
                                             logout(navigate);
                                             setLoggedIn(false);
+                                        
                                         }}
                                     >
                                         Đăng xuất
@@ -193,11 +189,9 @@ export default function Navbar() {
                         </div>
                     </>
                 )}
-
-          </div>
-        </div>
-
-      </div>
-    </nav>
-  );
+            </div>
+</nav>
+);
 }
+
+export default Navbar;
