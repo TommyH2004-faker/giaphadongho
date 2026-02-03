@@ -7,4 +7,5 @@ public class UserResponse
     public string Role { get; set; } = null!;
     public bool Enabled { get; set; }
     public string MatKhauMaHoa { get; set; } = null!;
+    public string? SoDienThoai { get; set; }
 }

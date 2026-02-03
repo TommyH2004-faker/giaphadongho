@@ -7,10 +7,12 @@ namespace GiaPha_Application.Features.ThanhVien.Command.Create;
 public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Result<ThanhVienResponse>>
 {
     private readonly IThanhVienRepository _thanhVienRepository;
+    private readonly IChiHoRepository _chiHoRepository;
 
-    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository)
+    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository, IChiHoRepository chiHoRepository)
     {
         _thanhVienRepository = thanhVienRepository;
+        _chiHoRepository = chiHoRepository;
     }
 
     public async Task<Result<ThanhVienResponse>> Handle(CreateThanhVienCommand request, CancellationToken cancellationToken)
@@ -26,7 +28,7 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
             request.DoiThu,
             request.TieuSu,
             null,
-            request.IdHo
+            request.ChiHoId
         );
         // check trùng email 
         var existEmail = await _thanhVienRepository.GetThanhVienByNameAsync(request.HoTen);
@@ -35,7 +37,16 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
             return Result<ThanhVienResponse>.Failure(ErrorType.Conflict, "Thành viên với email này đã tồn tại");
         }
         var createdThanhVien = await _thanhVienRepository.CreateThanhVienAsync(thanhVien);
-        thanhVien.RaiseCreatedEvent();
+        
+        // Lấy HoId từ ChiHo nếu có
+        Guid? hoId = null;
+        if (request.ChiHoId.HasValue)
+        {
+            var chiHo = await _chiHoRepository.GetChiHoByIdAsync(request.ChiHoId.Value);
+            hoId = chiHo.Data?.IdHo;
+        }
+        
+        thanhVien.RaiseCreatedEventWithHoId(hoId);
         await _thanhVienRepository.SaveChangesAsync();
 
         if (createdThanhVien.Data == null)

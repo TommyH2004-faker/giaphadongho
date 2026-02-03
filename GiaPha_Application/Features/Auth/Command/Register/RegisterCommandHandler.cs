@@ -41,7 +41,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
                 TenDangNhap: request.TenDangNhap,
                 email: request.Email,
                 MatKhauMaHoa: hashedPassword, 
-                gioiTinh: GiaPha_Domain.Enums.GioiTinh.Khac,
+                SoDienThoai: request.SoDienThoai,
+                gioiTinh: request.GioiTinh ?? GiaPha_Domain.Enums.GioiTinh.Khac,
                 role: "User"
             );
 
@@ -60,7 +61,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
                 Email = newUser.Email,
                 Role = newUser.Role,
                 Enabled = newUser.Enabled,
-                MatKhauMaHoa = newUser.MatKhauMaHoa
+                MatKhauMaHoa = newUser.MatKhauMaHoa,
+                SoDienThoai = newUser.SoDienThoai
                 });
     }
 }

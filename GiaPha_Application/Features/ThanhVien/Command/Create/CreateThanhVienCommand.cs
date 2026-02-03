@@ -12,6 +12,6 @@ public record CreateThanhVienCommand() : IRequest<Result<ThanhVienResponse>>
     public DateTime NgaySinh { get; init; }
     public string NoiSinh { get; init; } = null!;
     public int DoiThu { get; init; }
-    public Guid IdHo { get ; init ; }
+    public Guid? ChiHoId { get; init; }
     public string? TieuSu { get; init; }
 }

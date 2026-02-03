@@ -24,7 +24,9 @@ public class CreateThanhVienValidation: AbstractValidator<CreateThanhVienCommand
 
         RuleFor(x => x.DoiThu)
             .GreaterThan(0).WithMessage("Đời thứ phải lớn hơn 0");
-        RuleFor(x => x.IdHo)
-            .NotEmpty().WithMessage("IdHo không được để trống");
+        RuleFor(x => x.TieuSu)
+            .MaximumLength(1000).WithMessage("Tiểu sử không được vượt quá 1000 ký tự");
+        RuleFor(x => x.ChiHoId)
+            .NotEmpty().WithMessage("Chi hộ ID không được để trống");
     }
 }

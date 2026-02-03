@@ -22,5 +22,17 @@ public class TaiKhoanNguoiDungConfiguration : IEntityTypeConfiguration<TaiKhoanN
         builder.Property(x => x.Enabled).HasDefaultValue(false);
         builder.Property(x => x.RefreshToken).HasMaxLength(500);
         builder.Property(x=>x.RefreshTokenExpiry);
+        
+        // Relationship với ThanhVien (1-1)
+        builder.HasOne(x => x.ThanhVien)
+            .WithOne()
+            .HasForeignKey<TaiKhoanNguoiDung>(x => x.ThanhVienId)
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        // Relationship với ChiHo (N-1)
+        builder.HasOne(x => x.ChiHo)
+            .WithMany()
+            .HasForeignKey(x => x.ChiHoId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

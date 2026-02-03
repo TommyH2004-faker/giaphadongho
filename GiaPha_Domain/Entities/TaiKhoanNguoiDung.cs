@@ -18,6 +18,16 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
     public bool Enabled { get; private set; } 
     public DateTime? RefreshTokenExpiry { get; private set; }
     public string? RefreshToken { get; private set; }
+    
+    // Relationship với ThanhVien
+    public Guid? ThanhVienId { get; private set; }
+    public ThanhVien? ThanhVien { get; private set; }
+    // phone number
+    public string? SoDienThoai { get; private set; }
+    
+    // Relationship với ChiHo (dùng cho phân quyền thông báo)
+    public Guid? ChiHoId { get; private set; }
+    public ChiHo? ChiHo { get; private set; }
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => DomainEventsInternal.AsReadOnly();
     private List<IDomainEvent> DomainEventsInternal { get; } = new List<IDomainEvent>();
@@ -28,6 +38,7 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
         string TenDangNhap,
         string email,
         string MatKhauMaHoa,
+        string? SoDienThoai,
         GioiTinh gioiTinh,
         string role)
         {
@@ -39,7 +50,6 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
 
             if (string.IsNullOrWhiteSpace(MatKhauMaHoa))
                 throw new ArgumentException("MatKhauMaHoa is required");
-
             // Tạo activation code 6 số
             var activationCode = new Random().Next(100000, 999999).ToString();
 
@@ -51,7 +61,8 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
                 GioiTinh = gioiTinh,
                 Role = role,
                 ActivationCode = activationCode,
-                Enabled = false
+                Enabled = false,
+                SoDienThoai = SoDienThoai
             };
             return user;
         }
@@ -132,6 +143,19 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
 
             MatKhauMaHoa = newPasswordHash;
         }
+        
+        // Link với ThanhVien
+        public void LinkToThanhVien(Guid thanhVienId)
+        {
+            ThanhVienId = thanhVienId;
+        }
+        
+        // Set ChiHo cho user
+        public void SetChiHo(Guid chiHoId)
+        {
+            ChiHoId = chiHoId;
+        }
+        
         public void RaiseForgotPasswordEvent(string plainPassword)
         {
             AddDomainEvent(new UserForgotPassword(

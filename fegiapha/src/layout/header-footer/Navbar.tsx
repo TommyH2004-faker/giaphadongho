@@ -1,197 +1,305 @@
 import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
-
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import { useAuth } from "../../utils/AuthContext";
 import { getAvatarByToken, getLastNameByToken, getRoleByToken, isToken, logout } from "../../utils/JwtService";
-// interface NavbarProps {
-//     tuKhoaTimKiem: string;
-//     setTuKhoaTimKiem: (tuKhoa: string) => void;
-// }
+import { useEffect, useState } from "react";
+
+interface Notification {
+  id: string;
+  noiDung: string;
+  daDoc: boolean;
+  createdAt?: string;
+  isGlobal?: boolean;
+  chiHoId?: string;
+  hoId?: string;
+}
+
+type TabType = 'all' | 'new' | 'old';
+
 function Navbar() {
 
-    const {setLoggedIn} = useAuth();
-    const navigate = useNavigate();
-  
-    const location = useLocation();
-    const adminEndpoint = ["/admin"];
-    if(adminEndpoint.includes(location.pathname)){
-        return null;
+  const { setLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [activeTab, setActiveTab] = useState<TabType>('all');
+  const unreadCount = notifications.filter(n => !n.daDoc).length;
+
+  // Hàm load notifications
+  const loadNotifications = () => {
+    if (!isToken()) return;
+
+    fetch("http://localhost:5000/api/notification/my", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => setNotifications(data))
+      .catch(() => console.log("Load notification thất bại"));
+  };
+
+  // Load lần đầu
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+
+  // Auto-refresh mỗi 30 giây
+  useEffect(() => {
+    if (!isToken()) return;
+
+    const interval = setInterval(() => {
+      loadNotifications();
+    }, 30000); // 30 giây
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const adminEndpoint = ["/admin"];
+  if(adminEndpoint.includes(location.pathname)){
+      return null;
+  }
+
+  const markAsRead = (id: string) => {
+    fetch(`http://localhost:5000/api/notification/read/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    setNotifications(prev =>
+      prev.map(n =>
+        n.id === id ? { ...n, daDoc: true } : n
+      )
+    );
+  };
+
+  // Lọc và sắp xếp thông báo
+  const getFilteredNotifications = () => {
+    let filtered = [...notifications];
+    
+    if (activeTab === 'new') {
+      filtered = filtered.filter(n => !n.daDoc);
+    } else if (activeTab === 'old') {
+      filtered = filtered.filter(n => n.daDoc);
     }
+    
+    // Sắp xếp theo thời gian mới nhất
+    return filtered.sort((a, b) => {
+      if (!a.createdAt || !b.createdAt) return 0;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  };
 
-    return(
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
-                <a className="navbar-brand" href="#">Bookstore</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+  const filteredNotifications = getFilteredNotifications();
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/">Trang chủ</NavLink>
-                        </li>
-                        <li className='nav-item'>
-                            <NavLink className='nav-link' to='/about'>
-                                Giới thiệu
-                            </NavLink>
-                        </li>
-                        {/* <li className="nav-item dropdown">
-                            <NavLink className="nav-link dropdown-toggle" to="#" id="navbarDropdown1" role="button"
-                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                Thể loại sách
-                            </NavLink>
-                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                <li><NavLink className="dropdown-item" to="/30">Thể loại 1</NavLink></li>
-                                <li><NavLink className="dropdown-item" to="/32">Thể loại 2</NavLink></li>
-                                <li><NavLink className="dropdown-item" to="/36">Thể loại 3</NavLink></li>
-                            </ul>
-                        </li>*/}
-                        <li className='nav-item dropdown dropdown-hover'>
-                            <a
-                                className='nav-link dropdown-toggle'
-                                href='#'
-                                role='button'
-                                data-bs-toggle='dropdown'
-                                aria-expanded='false'
-                            >
-                                Thể loại
-                            </a>
-                        </li>
-                        <li className='nav-item'>
-                            <Link className='nav-link' to={"/policy"}>
-                                Chính sách
-                            </Link>
-                        </li>
-                        {isToken() && (
-                            <li className='nav-item'>
-                                <NavLink className='nav-link' to={"/feedback"}>
-                                    Feedback
-                                </NavLink>
-                            </li>
-                        )}
-                    </ul>
+  return (
+    <nav className="navbar navbar-expand-lg custom-navbar navbar-yellow bg-yellow">
+      <div className="container-fluid">
+
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img src="/logo_main.png" style={{height:120}} />
+        </Link>
+
+        {/* TOGGLE BUTTON CHO MOBILE */}
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/">Trang chủ</NavLink>
+            </li>
+
+            <li className='nav-item'>
+              <NavLink className='nav-link' to='/about'>Tính năng </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink className='nav-link' to='/about'>Bảng giá </NavLink>
+            </li>
+            <li className='nav-item'>
+              <NavLink className='nav-link' to='/about'>Tin tức </NavLink>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to={"/policy"}>Chính sách</Link>
+            </li>
+            {isToken() && (
+            <li className='nav-item'>
+                <NavLink className='nav-link' to={"/feedback"}>
+                    Feedback
+                </NavLink>
+            </li>
+            )}
+          </ul>
+
+          {/* PHẦN ĐĂNG NHẬP/ĐĂNG KÝ VÀ USER MENU CHO MOBILE */}
+          <div className="d-flex align-items-center">
+            {!isToken() && (
+              <div className="d-flex flex-column flex-lg-row gap-2">
+                <Link to="/dangnhap"><Button>Đăng nhập</Button></Link>
+                <Link to="/dangky"><Button>Đăng ký</Button></Link>
+              </div>
+            )}
+
+            {isToken() && (
+              <>
+                {/* NOTIFICATION */}
+                <div className='dropdown me-3'>
+                  <a className='text-reset dropdown-toggle hidden-arrow'
+                     data-bs-toggle='dropdown'
+                     style={{cursor: 'pointer'}}>
+
+                    <IconButton size="small">
+                      <Badge badgeContent={unreadCount} color="error">
+                        <NotificationsIcon />
+                      </Badge>
+                    </IconButton>
+
+                  </a>
+
+                  <ul className="dropdown-menu dropdown-menu-end p-0" style={{width: 380, maxHeight: 500, overflow: 'hidden'}}>
+                    {/* Header Tabs */}
+                    <li className="px-3 pt-3 pb-2 border-bottom">
+                      <div className="d-flex gap-2">
+                        <button 
+                          className={`btn btn-sm ${activeTab === 'all' ? 'btn-primary' : 'btn-outline-secondary'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setActiveTab('all');
+                          }}
+                          style={{flex: 1, fontSize: '0.875rem'}}
+                        >
+                          Tất cả
+                        </button>
+                        <button 
+                          className={`btn btn-sm ${activeTab === 'new' ? 'btn-primary' : 'btn-outline-secondary'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setActiveTab('new');
+                          }}
+                          style={{flex: 1, fontSize: '0.875rem'}}
+                        >
+                          Tin mới ({unreadCount})
+                        </button>
+                        <button 
+                          className={`btn btn-sm ${activeTab === 'old' ? 'btn-primary' : 'btn-outline-secondary'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setActiveTab('old');
+                          }}
+                          style={{flex: 1, fontSize: '0.875rem'}}
+                        >
+                          Đã đọc
+                        </button>
+                      </div>
+                    </li>
+
+                    {/* Notification List with Scroll */}
+                    <li style={{maxHeight: 400, overflowY: 'auto', overflowX: 'hidden'}}>
+                      {filteredNotifications.length === 0 && (
+                        <div className="text-center text-muted py-4">
+                          Không có thông báo
+                        </div>
+                      )}
+
+                      {filteredNotifications.map((n: Notification) => (
+                        <a 
+                          key={n.id}
+                          className={`dropdown-item py-3 px-3 border-bottom ${!n.daDoc ? 'bg-light fw-bold' : ''}`}
+                          onClick={() => markAsRead(n.id)}
+                          style={{
+                            cursor: 'pointer',
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word'
+                          }}
+                        >
+                          <div className="d-flex align-items-start">
+                            <div style={{flex: 1}}>
+                              <div style={{fontSize: '0.9rem'}}>{n.noiDung}</div>
+                              {n.createdAt && (
+                                <small className="text-muted">
+                                  {new Date(n.createdAt).toLocaleString('vi-VN')}
+                                </small>
+                              )}
+                              {n.isGlobal && (
+                                <span className="badge bg-warning text-dark ms-2" style={{fontSize: '0.6rem'}}>Toàn hệ thống</span>
+                              )}
+                              {n.hoId && !n.isGlobal && (
+                                <span className="badge bg-success text-white ms-2" style={{fontSize: '0.6rem'}}>Dòng họ</span>
+                              )}
+                              {n.chiHoId && !n.hoId && !n.isGlobal && (
+                                <span className="badge bg-info text-white ms-2" style={{fontSize: '0.6rem'}}>Chi họ</span>
+                              )}
+                            </div>
+                            {!n.daDoc && (
+                              <span className="badge bg-primary ms-2" style={{fontSize: '0.6rem'}}>Mới</span>
+                            )}
+                          </div>
+                        </a>
+                      ))}
+                    </li>
+                  </ul>
                 </div>
 
-               
-               
-                {/* Biểu tượng đăng nhập */}
-                {!isToken() && (
-                    <div>
-                        <Link to={"/dangnhap"}>
-                            <Button>Đăng nhập</Button>
+                {/* AVATAR */}
+                <div className='dropdown'>
+                  <a className='dropdown-toggle d-flex align-items-center hidden-arrow'
+                     data-bs-toggle='dropdown'>
+                    <Avatar
+                      alt={getLastNameByToken()?.toUpperCase()}
+                      src={getAvatarByToken()}
+                      sx={{width:30,height:30}}
+                    />
+                  </a>
+
+                  <ul className='dropdown-menu dropdown-menu-end'>
+                    <li>
+                      <Link to="/profile" className="dropdown-item">
+                        Thông tin cá nhân
+                      </Link>
+                    </li>
+
+                    {getRoleByToken()==="ADMIN" && (
+                      <li>
+                        <Link to="/admin/dashboard" className="dropdown-item">
+                          Quản lý
                         </Link>
-                        <Link to={"/dangKy"}>
-                            <Button>Đăng ký</Button>
-                        </Link>
-                    </div>
-                )}
-                {isToken() && (
-                    <>
-                        {/* <!-- Notifications --> */}
-                        <div className='dropdown'>
-                            <a
-                                className='text-reset me-3 dropdown-toggle hidden-arrow'
-                                href='#'
-                                id='navbarDropdownMenuLink'
-                                role='button'
-                                data-mdb-toggle='dropdown'
-                                aria-expanded='false'
-                            >
-                                <i className='fas fa-bell'></i>
-                                <span className='badge rounded-pill badge-notification bg-danger'>
-										1
-									</span>
-                            </a>
-                            <ul
-                                className='dropdown-menu dropdown-menu-end'
-                                aria-labelledby='navbarDropdownMenuLink'
-                            >
-                                <li>
-                                    <a className='dropdown-item' href='#'>
-                                        Tin tức
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className='dropdown-item' href='#'>
-                                        Thông báo mới
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className='dropdown-item' href='#'>
-                                        Tất cả thông báo
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    {/* <!-- Avatar --> */}
-                        <div className='dropdown'>
-                            <a
-                                className='dropdown-toggle d-flex align-items-center hidden-arrow'
-                                href='#'
-                                id='navbarDropdownMenuAvatar'
-                                role='button'
-                                data-mdb-toggle='dropdown'
-                                aria-expanded='false'
-                            >
-                                <Avatar
-                                    style={{fontSize: "14px"}}
-                                    alt={getLastNameByToken()?.toUpperCase()}
-                                    src={getAvatarByToken()}
-                                    sx={{width: 30, height: 30}}
-                                />
-                            </a>
-                            <ul
-                                className='dropdown-menu dropdown-menu-end'
-                                aria-labelledby='navbarDropdownMenuAvatar'
-                            >
-                                <li>
-                                    <Link to={"/profile"} className='dropdown-item'>
-                                        Thông tin cá nhân
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className='dropdown-item'
-                                        to='/my-favorite-books'
-                                    >
-                                        Sách yêu thích của tôi
-                                    </Link>
-                                </li>
-                                {getRoleByToken() === "ADMIN" && (
-                                    <li>
-                                        <Link
-                                            className='dropdown-item'
-                                            to='/admin/dashboard'
-                                        >
-                                            Quản lý
-                                        </Link>
-                                    </li>
-                                )}
-                                <li>
-                                    <a
-                                        className='dropdown-item'
-                                        style={{cursor: "pointer"}}
-                                        onClick={() => {
-                                    
-                                            logout(navigate);
-                                            setLoggedIn(false);
-                                        
-                                        }}
-                                    >
-                                        Đăng xuất
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </>
-                )}
-            </div>
-</nav>
-);
+                      </li>
+                    )}
+
+                    <li>
+                      <a className="dropdown-item"
+                         style={{cursor: 'pointer'}}
+                         onClick={()=>{
+                           logout(navigate);
+                           setLoggedIn(false);
+                         }}>
+                        Đăng xuất
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  );
 }
 
 export default Navbar;

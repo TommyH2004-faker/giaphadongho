@@ -64,9 +64,22 @@ public class ThanhVien : IHasDomainEvents
             this.Id,
             this.HoTen,
             this.Email,
-            this.ChiHo != null ? this.ChiHo.TenChiHo : string.Empty,
             DateTime.UtcNow,
-            this.ChiHoId ?? Guid.Empty
+            this.ChiHoId,
+            this.ChiHo?.IdHo
+        ));
+    }
+    
+    // Raise event với HoId được truyền vào
+    public void RaiseCreatedEventWithHoId(Guid? hoId)
+    {
+        AddDomainEvent(new ThanhVienCreated(
+            this.Id,
+            this.HoTen,
+            this.Email,
+            DateTime.UtcNow,
+            this.ChiHoId,
+            hoId
         ));
     }
 

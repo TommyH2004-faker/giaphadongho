@@ -16,10 +16,27 @@ namespace GiaPha_Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<Notification>> GetAllForUserAsync(Guid userId)
+        public async Task<IReadOnlyList<Notification>> GetAllForUserAsync(Guid userId, Guid? chiHoId, Guid? hoId)
         {
+            // Logic:
+            // 1. IsGlobal = true → TẤT CẢ thấy
+            // 2. NguoiNhanId = userId → Cá nhân
+            // 3. ChiHoId = chiHoId của user → Chi Họ cụ thể
+            // 4. HoId = hoId của user → TẤT CẢ thuộc Họ đó thấy
+            
             return await _context.Notifications
-                .Where(n => n.IsGlobal || n.NguoiNhanId == userId)
+                .Where(n => n.IsGlobal 
+                         || n.NguoiNhanId == userId 
+                         || (chiHoId.HasValue && n.ChiHoId.HasValue && n.ChiHoId == chiHoId.Value)
+                         || (hoId.HasValue && n.HoId.HasValue && n.HoId == hoId.Value))
+                .OrderByDescending(n => n.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Notification>> GetAllForAdminAsync()
+        {
+            // Admin thấy tất cả
+            return await _context.Notifications
                 .OrderByDescending(n => n.CreatedAt)
                 .ToListAsync();
         }

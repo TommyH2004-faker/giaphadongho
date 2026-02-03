@@ -24,12 +24,20 @@ namespace GiaPha_Infrastructure.Service
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            // var claims = new[]
+            // {
+            //     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            //     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            //     new Claim("Name", user.TenDangNhap),
+            //     new Claim(ClaimTypes.Role, user.Role ?? "User"),
+            //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            // };
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("Name", user.TenDangNhap),
-                new Claim(ClaimTypes.Role, user.Role ?? "User"),
+                new Claim("name", user.TenDangNhap),
+                new Claim("role", user.Role ?? "USER"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

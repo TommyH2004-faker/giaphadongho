@@ -3,6 +3,9 @@ using GiaPha_Application.Features.Auth.Command.Changepassword.ChangePasswordComm
 using GiaPha_Application.Features.Auth.Command.ForgetPassword;
 using GiaPha_Application.Features.Auth.Command.Login;
 using GiaPha_Application.Features.Auth.Command.Register;
+using GiaPha_Application.Features.Auth.Queries.CheckExistEmail;
+using GiaPha_Application.Features.Auth.Queries.CheckExistUsername;
+using GiaPha_Domain.Enums;
 using GiaPha_WebAPI.Controller.LoginController;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -38,19 +41,45 @@ public class ControllerLogin : ControllerBase
 
         return Ok(result);
     }
-    [HttpPost("/register")]
-    public async Task<IActionResult> Register([FromBody] RegisterCommand request)
+    // [HttpPost("/register")]
+    // public async Task<IActionResult> Register([FromBody] RegisterCommand request)
+    // {
+    //     var command = new RegisterCommand
+    //     {
+    //         TenDangNhap = request.TenDangNhap,
+    //         Email = request.Email,
+    //         MatKhau = request.MatKhau,
+    //         SoDienThoai = request.SoDienThoai,
+    //         GioiTinh = request.GioiTinh,
+    //     };
+
+    //     var result = await _mediator.Send(command);
+
+    //     return Ok(result);
+    // }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     {
         var command = new RegisterCommand
         {
-            TenDangNhap = request.TenDangNhap,
+            TenDangNhap = request.Username,
+            MatKhau = request.Password,
             Email = request.Email,
-            MatKhau = request.MatKhau,
+            SoDienThoai = request.PhoneNumber,
+            GioiTinh = request.Gender switch
+            {
+                1 => GioiTinh.Nam,
+                2 => GioiTinh.Nu,
+                _ => GioiTinh.Khac
+            }
         };
 
         var result = await _mediator.Send(command);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.ErrorMessage });
+
+        return Ok(result.Data);
     }
     [HttpPost("/changepassword")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
@@ -90,5 +119,28 @@ public class ControllerLogin : ControllerBase
         var result = await _mediator.Send(command);
 
         return Ok(result);
+    }
+    [HttpGet("check-email")]
+    public async Task<IActionResult> CheckExistEmail([FromQuery] string email)
+    {
+        var query = new CheckExistEmailQuery(email);
+        var result = await _mediator.Send(query);
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.ErrorMessage);
+            
+        return Ok(result.Data); // Trả về true/false
+    }
+
+    [HttpGet("check-username")]
+    public async Task<IActionResult> CheckExistUsername([FromQuery] string username)
+    {
+        var query = new CheckExistUsernameQuery(username);
+        var result = await _mediator.Send(query);
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.ErrorMessage);
+            
+        return Ok(result.Data); // Trả về true/false
     }
 }   

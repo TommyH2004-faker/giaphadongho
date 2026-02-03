@@ -215,6 +215,9 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<bool>("DaDoc")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<Guid?>("HoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<bool>("IsGlobal")
                         .HasColumnType("tinyint(1)");
 
@@ -226,6 +229,10 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChiHoId");
+
+                    b.HasIndex("HoId");
 
                     b.ToTable("Notifications");
                 });
@@ -300,6 +307,9 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("longtext");
 
+                    b.Property<Guid?>("ChiHoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -329,12 +339,23 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("SoDienThoai")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("TenDangNhap")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid?>("ThanhVienId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ChiHoId");
+
+                    b.HasIndex("ThanhVienId")
+                        .IsUnique();
 
                     b.ToTable("TaiKhoanNguoiDungs");
                 });
@@ -487,6 +508,23 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Navigation("Vo");
                 });
 
+            modelBuilder.Entity("GiaPha_Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ChiHo", "ChiHo")
+                        .WithMany()
+                        .HasForeignKey("ChiHoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
+                        .WithMany()
+                        .HasForeignKey("HoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("ChiHo");
+
+                    b.Navigation("Ho");
+                });
+
             modelBuilder.Entity("GiaPha_Domain.Entities.QuanHeChaCon", b =>
                 {
                     b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ChaMe")
@@ -513,6 +551,23 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasForeignKey("ThanhVienId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ThanhVien");
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.TaiKhoanNguoiDung", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ChiHo", "ChiHo")
+                        .WithMany()
+                        .HasForeignKey("ChiHoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThanhVien")
+                        .WithOne()
+                        .HasForeignKey("GiaPha_Domain.Entities.TaiKhoanNguoiDung", "ThanhVienId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("ChiHo");
 
                     b.Navigation("ThanhVien");
                 });

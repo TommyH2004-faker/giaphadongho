@@ -9,14 +9,17 @@ public static class ThanhVienEvent
         public string HoTen { get; init; }
         public string Email { get; init; } = string.Empty;
         public DateTime CreatedAt { get; init; }
-        public Guid Idho { get; init; }
-        public ThanhVienCreated(Guid id, string hoTen, string email, string tenChiHo, DateTime createdAt, Guid idho)
+        public Guid? ChiHoId { get; init; }
+        public Guid? HoId { get; init; }
+        
+        public ThanhVienCreated(Guid id, string hoTen, string email, DateTime createdAt, Guid? chiHoId, Guid? hoId)
         {
             Id = id;
             HoTen = hoTen;
             Email = email;
             CreatedAt = createdAt;
-            Idho = idho;
+            ChiHoId = chiHoId;
+            HoId = hoId;
         }
     }
 }
