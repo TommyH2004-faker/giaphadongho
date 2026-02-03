@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TodoApp.Application.Service;
 
-
 namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
 {
     /// <summary>
@@ -14,13 +13,11 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
     {
         private readonly ILogger<UserRegisteredNotificationHandler> _logger;
         private readonly IEmailService _emailService;
-
         private readonly string _frontendUrl;
 
         public UserRegisteredNotificationHandler(
             ILogger<UserRegisteredNotificationHandler> logger,
             IEmailService emailService,
-
             IConfiguration configuration)
         {
             _logger = logger;
@@ -32,7 +29,8 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
         {
             _logger.LogInformation("📧 [USER] Gửi email xác thực cho user {Email}", notification.Email);
 
-            var activationLink = $"{_frontendUrl}/activate?code={notification.ActivationCode}&userId={notification.id}";
+            // SỬA LẠI LINK KÍCH HOẠT - khớp với route /active/:code/:userId
+            var activationLink = $"{_frontendUrl}/active/{notification.ActivationCode}/{notification.id}";
 
             // 2. Gửi email xác thực cho user
             var subject = "Chào mừng đến Gia Phả Dòng Họ - Kích hoạt tài khoản";
@@ -90,6 +88,13 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
                         text-decoration: none;
                         border-radius: 30px;
                         font-weight: bold;
+                        margin: 10px 0;
+                    }}
+                    .info-box {{
+                        background: #f8fafc;
+                        border-left: 4px solid #0f766e;
+                        padding: 15px;
+                        margin: 20px 0;
                     }}
                     .footer {{
                         background: #f9fafb;
@@ -112,42 +117,53 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
                         <h2>Xin chào {notification.TenDangNhap},</h2>
 
                         <p>
-                            Bạn vừa đăng ký tài khoản trên <strong>Hệ thống Gia Phả Dòng Họ</strong>.
+                            Bạn vừa đăng ký tài khoản trên <strong>Hệ thống Gia Phả Dòng Họ</strong> với email <strong>{notification.Email}</strong>.
                         </p>
 
                         <p>
                             Để hoàn tất việc đăng ký, vui lòng xác thực tài khoản bằng một trong hai cách dưới đây:
                         </p>
 
-                        <h3> Mã xác thực</h3>
+                        <h3>🔑 Mã xác thực</h3>
                         <div class=""code-box"">
                             <div class=""code"">{notification.ActivationCode}</div>
                         </div>
 
-                        <h3> Hoặc nhấn vào liên kết</h3>
+                        <h3>🔗 Hoặc nhấn vào liên kết</h3>
                         <p style=""text-align:center;"">
                             <a href=""{activationLink}"" class=""button"">
-                                Xác thực tài khoản
+                                Kích hoạt tài khoản ngay
                             </a>
                         </p>
 
+                        <div class=""info-box"">
+                            <strong>📋 Thông tin tài khoản:</strong><br/>
+                            • Tên đăng nhập: <strong>{notification.TenDangNhap}</strong><br/>
+                            • Email: <strong>{notification.Email}</strong><br/>
+                            • User ID: <code>{notification.id}</code>
+                        </div>
+
                         <p style=""margin-top:25px;color:#555;"">
-                            Mã xác thực có hiệu lực trong vòng <strong>24 giờ</strong>.<br/>
-                            Nếu bạn không thực hiện đăng ký, vui lòng bỏ qua email này.
+                            ⏰ Mã xác thực có hiệu lực trong vòng <strong>24 giờ</strong>.<br/>
+                            🔒 Nếu bạn không thực hiện đăng ký, vui lòng bỏ qua email này.
+                        </p>
+
+                        <p style=""color:#888;font-size:14px;"">
+                            💡 <strong>Lưu ý:</strong> Bạn cần kích hoạt tài khoản trước khi có thể đăng nhập vào hệ thống.
                         </p>
                     </div>
 
                     <div class=""footer"">
                         <p>© 2026 Hệ thống Gia Phả Dòng Họ</p>
                         <p>Email được gửi tự động, vui lòng không phản hồi.</p>
+                        <p>Cần hỗ trợ? Liên hệ: support@giaphadonghho.vn</p>
                     </div>
                 </div>
             </body>
             </html>";
 
-
             await _emailService.SendEmailAsync(notification.Email, subject, body, isHtml: true);
-            _logger.LogInformation(" [USER] Đã gửi email xác thực thành công cho {Email}", notification.Email);
+            _logger.LogInformation("✅ [USER] Đã gửi email xác thực thành công cho {Email}", notification.Email);
         }
     }
 }

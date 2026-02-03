@@ -7,6 +7,8 @@ namespace GiaPha_Application.Common
         Conflict,
         Forbidden, 
         Unauthorized,
-        Failure 
+        Failure,
+        NotActivated,
+        WrongPassword
     }
 }

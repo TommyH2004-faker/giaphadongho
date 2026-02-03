@@ -37,7 +37,8 @@ public class ControllerLogin : ControllerBase
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return Unauthorized(result);
+        return BadRequest(result);
+
 
         return Ok(result);
     }

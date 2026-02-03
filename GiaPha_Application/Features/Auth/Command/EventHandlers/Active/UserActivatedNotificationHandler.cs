@@ -32,42 +32,49 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Active
         {
             _logger.LogInformation("📧 [USER] Gửi email chúc mừng kích hoạt cho user ID {IdUser}", notification.id);
 
-            var subject = " Tài khoản đã được kích hoạt thành công!";
-            var body = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <style>
-                        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-                        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-                        .success {{ background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; }}
-                        .content {{ background: #f9f9f9; padding: 30px; margin-top: 20px; border-radius: 10px; }}
-                        .button {{ display: inline-block; background: #11998e; color: white !important; padding: 15px 40px; text-decoration: none; border-radius: 25px; margin: 20px 0; font-weight: bold; }}
-                    </style>
-                </head>
-                <body>
-                    <div class='container'>
-                        <div class='success'>
-                            <h1>🎉 Chúc mừng!</h1>
-                            <p style='font-size: 18px; margin: 0;'>Tài khoản của bạn đã được kích hoạt thành công!</p>
-                        </div>
-                        <div class='content'>
-                            <p>Bây giờ bạn có thể:</p>
-                            <ul>
-                                <li>📚 Duyệt và mua sách yêu thích</li>
-                                <li>⭐ Đánh giá và bình luận</li>
-                                <li>❤️ Lưu sách vào danh sách yêu thích</li>
-                                <li>🛒 Theo dõi đơn hàng của bạn</li>
-                            </ul>
-                            <div style='text-align: center;'>
-                                <a href='{_frontendUrl}/login' class='button'>
-                                    🚀 Đăng nhập ngay
-                                </a>
-                            </div>
+           var subject = "Kích hoạt tài khoản thành công - Hệ thống Gia Phả Dòng Họ";
+
+          var body = $@"
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                    .success {{ background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; }}
+                    .content {{ background: #f9f9f9; padding: 30px; margin-top: 20px; border-radius: 10px; }}
+                    .button {{ display: inline-block; background: #4A00E0; color: white !important; padding: 15px 40px; text-decoration: none; border-radius: 25px; margin: 20px 0; font-weight: bold; }}
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='success'>
+                        <h1>🎉 Kích hoạt tài khoản thành công!</h1>
+                        <p style='font-size: 18px; margin: 0;'>
+                            Chào mừng bạn đến với Hệ thống Gia Phả Dòng Họ
+                        </p>
+                    </div>
+
+                    <div class='content'>
+                        <p>Tài khoản của bạn đã được kích hoạt thành công. Từ bây giờ bạn có thể:</p>
+
+                        <ul>
+                            <li>🌳 Xem và tra cứu cây phả hệ dòng họ</li>
+                            <li>👨‍👩‍👧‍👦 Quản lý thông tin thành viên trong họ</li>
+                            <li>✍️ Cập nhật tiểu sử, hình ảnh, sự kiện</li>
+                            <li>🔔 Nhận thông báo từ dòng họ</li>
+                        </ul>
+
+                        <div style='text-align: center;'>
+                            <a href='{_frontendUrl}/dangnhap' class='button'>
+                                🔐 Đăng nhập hệ thống
+                            </a>
                         </div>
                     </div>
-                </body>
-                </html>";
+                </div>
+            </body>
+            </html>";
+
 
             await _emailService.SendEmailAsync(notification.Email, subject, body, isHtml: true);
             _logger.LogInformation(" [USER] Đã gửi email chúc mừng kích hoạt cho {Email}", notification.Email);

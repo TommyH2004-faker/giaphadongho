@@ -6,6 +6,9 @@ import Footer from './layout/footer/Footer';
 import { Error404Page } from './page/Error/404Page';
 import DangNhap from './layout/User/DangNhap';
 import DangKyNguoiDung from './layout/User/DangKyNguoiDung';
+import KichHoatTaiKhoan from './layout/User/KichHoatTaiKhoan';
+import { ForgotPassword } from './layout/User/ForgotPassword';
+import HomePage from './layout/homepage/HomePage';
 
 const App = () => {
     const [reloadAvatar] = useState(0);
@@ -26,10 +29,12 @@ const App = () => {
             {!isAdminPath && (
                 <Routes>
                     {/* Trang chủ */}
-                    <Route path='/' element={<div className="container mt-5"><h1>Trang chủ</h1></div>} />
+                    <Route path='/' element={<HomePage />} />
                     <Route path='dangnhap' element={<DangNhap />} />
                     <Route path='dangky' element={<DangKyNguoiDung />} />
                     <Route path='policy' element={<div className="container mt-5"><h1>Chính sách</h1></div>} />
+                    <Route path='/active/:code/:userId' element={<KichHoatTaiKhoan />} />
+                    <Route path='/forgot-password' element={<ForgotPassword />} />
                     {/* Nếu không tìm thấy trang */}
                     <Route path='*' element={<Error404Page />} />
                 </Routes>
