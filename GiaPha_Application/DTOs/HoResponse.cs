@@ -5,4 +5,5 @@ public class HoResponse
     public string? TenHo { get; set; }
     public string? MoTa { get; set; }
     public string? HinhAnh { get; set; }
+    public string? QueQuan { get; set; }
 }

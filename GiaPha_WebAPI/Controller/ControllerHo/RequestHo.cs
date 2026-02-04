@@ -6,6 +6,7 @@ public class RequestHo
     {
         public string TenHo { get; set; } = null!;
         public string? MoTa { get; set; }
+        public string? queQuan { get; set; }
     }
     public class UpdateHoRequest
     {

@@ -24,7 +24,8 @@ public class HoController : ControllerBase
         var command = new CreateHoCommand
         {
             TenHo = request.TenHo,
-            MoTa = request.MoTa
+            MoTa = request.MoTa,
+            queQuan = request.queQuan
         };
         var result = await _mediator.Send(command);
         return Ok(result);

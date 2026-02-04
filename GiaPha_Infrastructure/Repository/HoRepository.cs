@@ -15,10 +15,7 @@ public class HoRepository : IHoRepository
         _context = context;
     }
 
-    public async Task<Result<Ho?>> CreateHoAsync(string tenHo, string? moTa)
-    {
-        throw new NotImplementedException();
-    }
+   
 
     public async Task<Result<IEnumerable<Ho>>> GetAllHoAsync()
     {
@@ -63,5 +60,13 @@ public class HoRepository : IHoRepository
     public Task<Result<List<Ho>>> GetHosByThanhVienIdAsync(Guid thanhVienId)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Result<Ho?>> CreateHoAsync(string tenHo, string? moTa, string? queQuan)
+    {
+        var ho = Ho.Create(tenHo, moTa, queQuan);
+        _context.Hos.Add(ho);
+        await _context.SaveChangesAsync();
+        return Result<Ho?>.Success(ho);
     }
 }

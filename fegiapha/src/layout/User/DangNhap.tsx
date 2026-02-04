@@ -40,8 +40,6 @@ const DangNhap: React.FC = () => {
 
       const result = await res.json();
       console.log("RESULT LOGIN:", result);
-
-      // ❌ Login thất bại
       if (!res.ok || !result.isSuccess) {
         switch (result.errorMessage) {
           case "ACCOUNT_NOT_FOUND":
@@ -62,7 +60,6 @@ const DangNhap: React.FC = () => {
         }
       }
 
-      // ✅ Login thành công
       const token = result.data?.token;
 
       if (!token) {

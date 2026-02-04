@@ -54,13 +54,14 @@ public class TaiKhoanNguoiDungConfiguration : IEntityTypeConfiguration<TaiKhoanN
         builder.Property(x => x.RefreshTokenExpiry);
 
         builder.Property(x => x.ThanhVienId)
-            ;
+            .IsRequired(false); // Cho phép nullable
 
         // Relationships
         builder.HasOne(x => x.ThanhVien)
             .WithMany()
             .HasForeignKey(x => x.ThanhVienId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false); // Relationship không bắt buộc
 
         // Indexes
         builder.HasIndex(x => x.TenDangNhap)

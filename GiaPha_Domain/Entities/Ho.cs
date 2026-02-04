@@ -9,7 +9,7 @@ public class Ho
     public string TenHo { get; private set; } = null!;
     public string? MoTa { get; private set; }
     public string? HinhAnh { get; private set; }
-    public DateTime NgayTao { get; private set; }
+    public DateTime NgayTao { get; private set; } = DateTime.UtcNow;
     public string? QueQuan { get; private set; }
 
     // ====== FK Thủy Tổ ======
@@ -34,8 +34,7 @@ public class Ho
             Id = Guid.NewGuid(),
             TenHo = tenHo,
             MoTa = moTa,
-            QueQuan = queQuan,
-            NgayTao = DateTime.UtcNow
+            QueQuan = queQuan
         };
     }
 

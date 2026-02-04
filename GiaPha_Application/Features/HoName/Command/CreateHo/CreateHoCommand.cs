@@ -7,4 +7,5 @@ public record CreateHoCommand : IRequest<Result<HoResponse>>
 {
     public string TenHo { get; init; } = null!;
     public string? MoTa { get; init; }
+    public string? queQuan { get; init; }
 }
