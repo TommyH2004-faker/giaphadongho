@@ -9,6 +9,7 @@ namespace GiaPha_Application.Common
         Unauthorized,
         Failure,
         NotActivated,
-        WrongPassword
+        WrongPassword,
+        DatabaseError
     }
 }

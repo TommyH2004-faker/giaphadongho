@@ -5,7 +5,7 @@
 namespace GiaPha_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class fixDatabasethanhviennew : Migration
+    public partial class fixDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

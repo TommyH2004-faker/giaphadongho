@@ -8,11 +8,30 @@ public class TepTinConfiguration : IEntityTypeConfiguration<TepTin>
 {
     public void Configure(EntityTypeBuilder<TepTin> builder)
     {
-         builder.HasKey(x => x.Id);
-         builder.Property(x => x.Id)
-             .HasDefaultValueSql("(UUID())")
-             .ValueGeneratedOnAdd();
-        builder.Property(x => x.DuongDan).IsRequired();
-        builder.Property(x => x.LoaiTep).IsRequired().HasMaxLength(50);
+        builder.ToTable("TepTins");
+        
+        builder.HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
+
+        builder.Property(x => x.DuongDan)
+        
+            .HasMaxLength(1000);
+
+        builder.Property(x => x.MoTa)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.ThanhVienId)
+            ;
+
+        // Relationships
+        builder.HasOne(x => x.ThanhVien)
+            .WithMany()
+            .HasForeignKey(x => x.ThanhVienId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Indexes
+        builder.HasIndex(x => x.ThanhVienId);
     }
 }

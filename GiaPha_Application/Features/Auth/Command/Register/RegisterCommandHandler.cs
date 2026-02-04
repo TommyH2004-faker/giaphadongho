@@ -37,13 +37,15 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
             // Hash password với BCrypt
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.MatKhau);
 
+
+
             var newUser = TaiKhoanNguoiDung.Register(
-                TenDangNhap: request.TenDangNhap,
-                email: request.Email,
-                MatKhauMaHoa: hashedPassword, 
-                SoDienThoai: request.SoDienThoai,
-                gioiTinh: request.GioiTinh ?? GiaPha_Domain.Enums.GioiTinh.Khac,
-                role: "User"
+                request.TenDangNhap,
+                request.Email,
+                request.GioiTinh,
+                hashedPassword,
+                request.SoDienThoai,
+                "User" 
             );
 
             // Lưu vào database
@@ -61,7 +63,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
                 Email = newUser.Email,
                 Role = newUser.Role,
                 Enabled = newUser.Enabled,
-                MatKhauMaHoa = newUser.MatKhauMaHoa,
+                MatKhauMaHoa = newUser.MatKhau,
                 SoDienThoai = newUser.SoDienThoai
                 });
     }

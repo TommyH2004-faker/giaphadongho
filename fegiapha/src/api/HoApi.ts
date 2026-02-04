@@ -16,3 +16,13 @@ export default function getAllHo(): Promise<Ho[]> {
       return result.data as Ho[];
     });
 }
+export async function getTop3Ho(): Promise<Ho[]> {
+  const res = await fetch(`${endpointBe}/api/Ho/top3`);
+  const json = await res.json();
+
+  if (!json.isSuccess) {
+    throw new Error(json.errorMessage);
+  }
+
+  return json.data as Ho[];
+}

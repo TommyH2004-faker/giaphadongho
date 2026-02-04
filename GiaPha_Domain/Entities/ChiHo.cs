@@ -1,56 +1,51 @@
 namespace GiaPha_Domain.Entities;
+
 public class ChiHo
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid Id { get; private set; }
     public string TenChiHo { get; private set; } = null!;
     public string? MoTa { get; private set; }
-    public Guid IdHo { get; private set; }
-    public Guid? TruongChiId { get; private set; }  
-    public Ho Ho { get; private set; } = null!;
-    public ThanhVien TruongChi { get; private set; } = null!;
 
-    public ICollection<ThanhVien> ThanhViens { get; private set; } 
-        = new List<ThanhVien>();
+    public Guid HoId { get; set; }
+    public Ho Ho { get; set; } = null!;
+
+    public Guid? TruongChiId { get; set; }
+    public ThanhVien? TruongChi { get; set; }
+
+    public ICollection<ThanhVien> ThanhViens { get; set; } = new List<ThanhVien>();
+
     private ChiHo() { }
-    public static ChiHo Create(
-        string tenChiHo,
-        Guid? idHo,
-        string? moTa = null)
+
+    public static ChiHo Create(string tenChiHo, Guid hoId, string? moTa)
     {
-        if(string.IsNullOrWhiteSpace(tenChiHo))
+        return new ChiHo
         {
-            throw new ArgumentException("Tên chi họ không được để trống", nameof(tenChiHo));
-        }
-        var chiHo = new ChiHo
-        {   
-            IdHo = idHo ?? Guid.Empty,
+            Id = Guid.NewGuid(),
             TenChiHo = tenChiHo,
-            MoTa = moTa,
+            HoId = hoId,
+            MoTa = moTa
         };
-        return chiHo;
     }
-    public void Update(string tenChiHo,Guid IdHo,string? moTa = null)
+
+    public void AssignTruongChi(ThanhVien tv)
+    {
+        TruongChi = tv;
+        TruongChiId = tv.Id;
+    }
+
+    public void Update(string tenChiHo,Guid hoId,string? moTa = null)
         {
             if(string.IsNullOrWhiteSpace(tenChiHo))
             {
                 throw new ArgumentException("Tên chi họ không được để trống", nameof(tenChiHo));
             }
-            if(IdHo == Guid.Empty)
+            if(hoId == Guid.Empty)
             {
-                throw new ArgumentException("IdHọ không được để trống", nameof(IdHo));
+                throw new ArgumentException("IdHọ không được để trống", nameof(hoId));
             }
             TenChiHo = tenChiHo;
             MoTa = moTa;
-            this.IdHo = IdHo;
+            HoId = hoId;
         }
-    public void AssignTruongChi(ThanhVien truongChi)
-    {
-        if (truongChi == null)
-        {
-            throw new ArgumentNullException(nameof(truongChi), "Trưởng chi không được null");
-        }
-        TruongChi = truongChi;
-        TruongChiId = truongChi.Id;
-    }
     
 }

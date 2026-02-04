@@ -62,4 +62,11 @@ public class HoController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+    [HttpGet("top3")]
+    public async Task<IActionResult> GetTop3Ho()
+    {
+        var query = new GetTop3HoQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
 }   

@@ -8,15 +8,57 @@ public class ThanhVienConfiguration : IEntityTypeConfiguration<ThanhVien>
 {
     public void Configure(EntityTypeBuilder<ThanhVien> builder)
     {
-         builder.HasKey(x => x.Id);
-         builder.Property(x => x.Id)
-             .HasDefaultValueSql("(UUID())")
-             .ValueGeneratedOnAdd();
-        builder.Property(x => x.HoTen).IsRequired().HasMaxLength(255);
-        builder.Property(x => x.GioiTinh).IsRequired().HasMaxLength(10);
-        builder.HasOne(x => x.ChiHo)
-               .WithMany(x => x.ThanhViens)
-               .HasForeignKey(x => x.ChiHoId)
-               .OnDelete(DeleteBehavior.SetNull);
+        builder.ToTable("ThanhViens");
+        
+        builder.HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
+
+        builder.Property(x => x.HoTen)
+        
+            .HasMaxLength(255);
+
+        builder.Property(x => x.GioiTinh)
+          ;
+
+        builder.Property(x => x.NgaySinh);
+
+        builder.Property(x => x.NgayMat);
+
+        builder.Property(x => x.NoiSinh)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.TieuSu)
+            .HasMaxLength(2000);
+
+        builder.Property(x => x.TrangThai)
+       
+            .HasDefaultValue(1);
+
+        builder.Property(x => x.HoId)
+            ;
+
+        builder.Property(x => x.ChiHoId);
+
+        builder.Property(x => x.DoiId);
+
+        // Relationships
+        builder.HasOne(x => x.Ho)
+            .WithMany()
+            .HasForeignKey(x => x.HoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // ChiHo relationship đã được định nghĩa ở ChiHoConfiguration
+
+        builder.HasOne(x => x.Doi)
+            .WithMany()
+            .HasForeignKey(x => x.DoiId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Indexes
+        builder.HasIndex(x => x.HoId);
+        builder.HasIndex(x => x.ChiHoId);
+        builder.HasIndex(x => x.DoiId);
     }
 }

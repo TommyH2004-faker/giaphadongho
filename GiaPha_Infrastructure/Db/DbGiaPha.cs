@@ -13,35 +13,39 @@ namespace GiaPha_Infrastructure.Db
         {
             _eventDispatcher = eventDispatcher;
         }
-    public DbSet<Album> Albums { get; set; }
+
     public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<ChiHo> ChiHos { get; set; }
-    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Doi> Dois { get; set; }
     public DbSet<Ho> Hos { get; set; }
+    public DbSet<MoPhan> MoPhans { get; set; }
     public DbSet<HonNhan> HonNhans { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<QuanHeChaCon> QuanHeChaCons { get; set; }
     public DbSet<SuKien> SuKiens { get; set; }
     public DbSet<TaiKhoanNguoiDung> TaiKhoanNguoiDungs { get; set; }
     public DbSet<TepTin> TepTins { get; set; }
-    public DbSet<ThanhTuu> ThanhTuu { get; set; }
+    public DbSet<ThanhTuu> ThanhTuus { get; set; }
     public DbSet<ThanhVien> ThanhViens { get; set; }
        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration( new AlbumConfiguration());
-            modelBuilder.ApplyConfiguration( new AuditLogConfiguration());
-            modelBuilder.ApplyConfiguration( new ChiHoConfiguration());
-            modelBuilder.ApplyConfiguration( new CommentConfiguration());
-            modelBuilder.ApplyConfiguration( new HoConfiguration());
-            modelBuilder.ApplyConfiguration( new HonNhanConfiguration());
-            modelBuilder.ApplyConfiguration( new NotificationConfiguration());
-            modelBuilder.ApplyConfiguration( new QuanHeChaConConfiguration());
-            modelBuilder.ApplyConfiguration( new SuKienConfiguration());
-            modelBuilder.ApplyConfiguration( new TaiKhoanNguoiDungConfiguration());
-            modelBuilder.ApplyConfiguration( new TepTinConfiguration());
-            modelBuilder.ApplyConfiguration( new ThanhTuuConfiguration());
-            modelBuilder.ApplyConfiguration( new ThanhVienConfiguration());
+         
+            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
+            modelBuilder.ApplyConfiguration(new ChiHoConfiguration());
+            modelBuilder.ApplyConfiguration(new DoiConfiguration());
+            modelBuilder.ApplyConfiguration(new MoPhanConfiguration());
+            modelBuilder.ApplyConfiguration(new HoConfiguration());
+            modelBuilder.ApplyConfiguration(new HonNhanConfiguration());
+
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new QuanHeChaConConfiguration());
+            modelBuilder.ApplyConfiguration(new SuKienConfiguration());
+            modelBuilder.ApplyConfiguration(new TaiKhoanNguoiDungConfiguration());
+            modelBuilder.ApplyConfiguration(new TepTinConfiguration());
+            modelBuilder.ApplyConfiguration(new ThanhTuuConfiguration());
+            modelBuilder.ApplyConfiguration(new ThanhVienConfiguration());
+        
         }
      public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -70,4 +74,5 @@ namespace GiaPha_Infrastructure.Db
             return result;
         }
     }
+
 }

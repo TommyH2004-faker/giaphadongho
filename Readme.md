@@ -30,12 +30,14 @@ dotnet add GiaPha_Application reference GiaPha_Domain
 
 dotnet add GiaPha_Infrastructure reference GiaPha_Application
 dotnet add GiaPha_Infrastructure reference GiaPha_Domain
-
+dotnet ef migrations add fixUser --startup-project ../GiaPha_WebAPI
 dotnet add GiaPha_WebAPI reference GiaPha_Infrastructure
-
+dotnet ef migrations add fixThanhVien --startup-project ../GiaPha_WebAPI
 # migrations
 dotnet ef migrations remove --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add InitialCreate --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add AddColumnsToHonNhan --startup-project ../GiaPha_WebAPI
+dotnet ef database update
 dotnet ef migrations add fixDatabase --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseNew --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseEnums --startup-project ../GiaPha_WebAPI
@@ -46,6 +48,8 @@ dotnet ef migrations add add Fixtaikhoannguoi --startup-project ../GiaPha_WebAPI
 dotnet ef database update --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add AddThanhVienIdToTaiKhoanNguoiDung --startup-project 
 dotnet ef migrations add addSoDienThoai --startup-project ../GiaPha_WebAPI
+
+dotnet ef migrations add RemoveColumnsDoiToThanhVien --startup-project ../GiaPha_WebAPI
 # chuyển hết về net 8.0 rồi sau đó chạy 
 dotnet clean
 dotnet restore

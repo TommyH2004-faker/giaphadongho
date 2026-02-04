@@ -33,7 +33,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
         }
 
         // Xác thực mật khẩu cũ
-        var isOldPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Data.MatKhauMaHoa);
+        var isOldPasswordValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Data.MatKhau);
         if (!isOldPasswordValid)
         {
             throw new InvalidOperationException("Old password is incorrect");

@@ -10,5 +10,7 @@ public interface IHoRepository
     Task<Result<IEnumerable<Ho>>> GetAllHoAsync();
     Task<Result<Ho?>> GetHoByIdAsync(Guid hoId);
     Task<Result<Ho?>> GetHoByNameAsync(string tenHo);
+    Task<Result<List<Ho>>> GetHosByThanhVienIdAsync(Guid thanhVienId);
+    Task<Result<List<Ho>>> GetTop3HoAsync();
     Task<Result<Ho>> UpdateHoAsync(Ho ho);
 }

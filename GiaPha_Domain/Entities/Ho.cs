@@ -2,32 +2,55 @@ namespace GiaPha_Domain.Entities;
 
 public class Ho
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    // ====== Keys ======
+    public Guid Id { get; private set; }
+
+    // ====== Properties ======
     public string TenHo { get; private set; } = null!;
     public string? MoTa { get; private set; }
-    // image of Ho could be added here in the future
     public string? HinhAnh { get; private set; }
-    public ICollection<ChiHo> CacChiHo { get; private set; } = new List<ChiHo>();
+    public DateTime NgayTao { get; private set; }
+    public string? QueQuan { get; private set; }
+
+    // ====== FK Thủy Tổ ======
+    public Guid? ThuyToId { get; set; }
+    public ThanhVien? ThuyTo { get; set; }
+
+    // ====== Navigation ======
+    public ICollection<ChiHo> ChiHos { get; set; } = new List<ChiHo>();
+    public ICollection<Doi> Dois { get; set; } = new List<Doi>();
+
+    // ====== Constructor ======
     private Ho() { }
-    public static Ho Create(string tenHo, string? moTa)
-        {
-            if (string.IsNullOrWhiteSpace(tenHo))
-                throw new ArgumentException("TenHo cannot be empty", nameof(tenHo));
 
-            return new Ho
-            {
-                Id = Guid.NewGuid(),
-                TenHo = tenHo,
-                MoTa = moTa,
-            };
-        } 
+    // ====== Factory ======
+    public static Ho Create(string tenHo, string? moTa, string? queQuan)
+    {
+        if (string.IsNullOrWhiteSpace(tenHo))
+            throw new ArgumentException("TenHo cannot be empty");
+
+        return new Ho
+        {
+            Id = Guid.NewGuid(),
+            TenHo = tenHo,
+            MoTa = moTa,
+            QueQuan = queQuan,
+            NgayTao = DateTime.UtcNow
+        };
+    }
+
+
+    public void SetThuyTo(Guid thanhVienId)
+    {
+        ThuyToId = thanhVienId;
+    }
+
     public void Update(string tenHo, string? moTa)
-        {
-            if (string.IsNullOrWhiteSpace(tenHo))
-                throw new ArgumentException("TenHo cannot be empty", nameof(tenHo));
+    {
+        if (string.IsNullOrWhiteSpace(tenHo))
+            throw new ArgumentException("TenHo cannot be empty");
 
-            TenHo = tenHo;
-            MoTa = moTa;
-        }
-   
+        TenHo = tenHo;
+        MoTa = moTa;
+    }
 }

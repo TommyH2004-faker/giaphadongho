@@ -7,19 +7,24 @@ interface Props {
 
 const CarouselItemHo: React.FC<Props> = ({ ho }) => {
   return (
-    <div className="col-md-4 text-center">
-      <img
-        src={ho.hinhAnh}
-        alt={ho.tenHo}
-        style={{
-          width: "100%",
-          height: "160px",
-          objectFit: "cover",
-          borderRadius: "8px",
-        }}
-      />
-      <h5 className="mt-2">{ho.tenHo}</h5>
-      <p>{ho.moTa}</p>
+    <div className="card shadow-sm border-0 mx-2" style={{ minHeight: 320 }}>
+      <div style={{ overflow: "hidden", borderRadius: "12px 12px 0 0" }}>
+        <img
+          src={ho.hinhAnh}
+          alt={ho.tenHo}
+          style={{
+            width: "100%",
+            height: "180px",
+            objectFit: "cover",
+            transition: "transform 0.4s",
+          }}
+          className="hover-zoom"
+        />
+      </div>
+      <div className="card-body">
+        <h5 className="card-title text-primary">{ho.tenHo}</h5>
+        <p className="card-text text-muted">{ho.moTa}</p>
+      </div>
     </div>
   );
 };

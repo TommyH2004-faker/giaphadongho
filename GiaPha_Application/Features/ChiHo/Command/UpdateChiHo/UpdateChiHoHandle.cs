@@ -37,7 +37,6 @@ public class UpdateChiHoHandle : IRequestHandler<UpdateChiHoCommand, Result<ChiH
             Id = chiHo.Data.Id,
             TenChiHo = chiHo.Data.TenChiHo,
             MoTa = chiHo.Data.MoTa,
-            IdHo = chiHo.Data.IdHo,
             TruongChiId = chiHo.Data.TruongChiId
         };
         return Result<ChiHoResponse>.Success(chiHoResponse);   

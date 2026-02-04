@@ -1,4 +1,4 @@
-using GiaPha_Domain.Enums;
+
 
 namespace GiaPha_Application.DTOs;
 public class ThanhVienResponse
@@ -6,7 +6,7 @@ public class ThanhVienResponse
     public Guid Id { get; set; }
     public string HoTen { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public GioiTinh gioiTinh { get; set; }
+    public bool gioiTinh { get; set; }
     public DateTime NgaySinh { get; set; }
     public string NoiSinh { get; set; } = null!;
     public DateTime? ngayMat { get; set; }

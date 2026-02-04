@@ -17,10 +17,7 @@ public class HoRepository : IHoRepository
 
     public async Task<Result<Ho?>> CreateHoAsync(string tenHo, string? moTa)
     {
-        var ho = Ho.Create(tenHo, moTa);
-        _context.Hos.Add(ho);
-        await _context.SaveChangesAsync();
-        return Result<Ho?>.Success(ho);
+        throw new NotImplementedException();
     }
 
     public async Task<Result<IEnumerable<Ho>>> GetAllHoAsync()
@@ -48,6 +45,8 @@ public class HoRepository : IHoRepository
         return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.TenHo == tenHo));
     }
 
+   
+
     public async Task<Result<Ho>> UpdateHoAsync(Ho ho)
     {
         _context.Hos.Update(ho);
@@ -55,4 +54,14 @@ public class HoRepository : IHoRepository
         return Result<Ho>.Success(ho);
     }
 
+    public async Task<Result<List<Ho>>> GetTop3HoAsync()
+    {
+        var top3Hos = await _context.Hos.Take(3).ToListAsync();
+        return Result<List<Ho>>.Success(top3Hos);
+    }
+
+    public Task<Result<List<Ho>>> GetHosByThanhVienIdAsync(Guid thanhVienId)
+    {
+        throw new NotImplementedException();
+    }
 }

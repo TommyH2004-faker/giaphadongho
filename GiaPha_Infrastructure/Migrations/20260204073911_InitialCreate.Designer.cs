@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GiaPha_Infrastructure.Migrations
 {
     [DbContext(typeof(DbGiaPha))]
-    [Migration("20260129033123_Notification")]
-    partial class Notification
+    [Migration("20260204073911_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,81 +25,57 @@ namespace GiaPha_Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("GiaPha_Domain.Entities.Album", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-
-                    b.Property<Guid?>("SuKienId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TenAlbum")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<Guid?>("ThanhVienId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Albums");
-                });
-
             modelBuilder.Entity("GiaPha_Domain.Entities.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ChangedBy")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<Guid>("EntityId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("EntityName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("longtext");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("longtext");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditLogs");
+                    b.HasIndex("ChangedAt");
+
+                    b.HasIndex("EntityId");
+
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ChiHo", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
-                    b.Property<Guid>("IdHo")
+                    b.Property<Guid>("HoId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("MoTa")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("TenChiHo")
                         .IsRequired()
@@ -111,69 +87,75 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdHo");
+                    b.HasIndex("HoId");
 
                     b.HasIndex("TruongChiId");
 
-                    b.ToTable("ChiHos");
+                    b.ToTable("ChiHos", (string)null);
                 });
 
-            modelBuilder.Entity("GiaPha_Domain.Entities.Comment", b =>
+            modelBuilder.Entity("GiaPha_Domain.Entities.Doi", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
-
-                    b.Property<Guid?>("CreatedById")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("NoiDung")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid?>("SuKienId")
+                    b.Property<Guid>("HoId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("ThanhVienId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("SoDoi")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
-
-                    b.Property<string>("MoTa")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("TenHo")
+                    b.Property<string>("TenDoi")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hos");
+                    b.HasIndex("HoId");
+
+                    b.ToTable("Dois", (string)null);
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("HinhAnh")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("QueQuan")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("TenHo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<Guid?>("ThuyToId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThuyToId");
+
+                    b.ToTable("Hos", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.HonNhan", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("ChongId")
                         .HasColumnType("char(36)");
@@ -181,11 +163,9 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<DateTime?>("NgayKetHon")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("NgayLyHon")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("NoiKetHon")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<Guid>("VoId")
                         .HasColumnType("char(36)");
@@ -196,15 +176,47 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasIndex("VoId");
 
-                    b.ToTable("HonNhans");
+                    b.ToTable("HonNhans", (string)null);
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.MoPhan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("KinhDo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<Guid>("ThanhVienId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ViDo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ViTri")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThanhVienId");
+
+                    b.ToTable("MoPhans", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid?>("ChiHoId")
                         .HasColumnType("char(36)");
@@ -213,7 +225,12 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("DaDoc")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid?>("HoId")
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("IsGlobal")
                         .HasColumnType("tinyint(1)");
@@ -223,19 +240,26 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.Property<string>("NoiDung")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.HasIndex("ChiHoId");
+
+                    b.HasIndex("DaDoc");
+
+                    b.HasIndex("HoId");
+
+                    b.HasIndex("NguoiNhanId");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.QuanHeChaCon", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("ChaMeId")
                         .HasColumnType("char(36)");
@@ -243,10 +267,8 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<Guid>("ConId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("LoaiQuanHe")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("LoaiQuanHe")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -254,26 +276,28 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasIndex("ConId");
 
-                    b.ToTable("QuanHeChaCons");
+                    b.ToTable("QuanHeChacons", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.SuKien", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("DiaDiem")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<int>("LoaiSuKien")
-                        .HasColumnType("int");
+                    b.Property<string>("LoaiSuKien")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("MoTa")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
 
-                    b.Property<DateTime?>("NgayXayRa")
+                    b.Property<DateTime>("NgayXayRa")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("ThanhVienId")
@@ -283,19 +307,21 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasIndex("ThanhVienId");
 
-                    b.ToTable("SuKiens");
+                    b.ToTable("SuKiens", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.TaiKhoanNguoiDung", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("ActivationCode")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Avatar")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -307,12 +333,13 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("GioiTinh")
-                        .HasColumnType("int");
+                    b.Property<bool>("GioiTinh")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("MatKhauMaHoa")
+                    b.Property<string>("MatKhau")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RefreshToken")
                         .HasMaxLength(500)
@@ -323,60 +350,68 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("User");
+
+                    b.Property<string>("SoDienThoai")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("TenDangNhap")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid>("ThanhVienId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("TaiKhoanNguoiDungs");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("TenDangNhap")
+                        .IsUnique();
+
+                    b.HasIndex("ThanhVienId");
+
+                    b.ToTable("TaiKhoanNguoiDungs", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.TepTin", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("DuongDan")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LoaiTep")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("MoTa")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<Guid?>("SuKienId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid?>("ThanhVienId")
+                    b.Property<Guid>("ThanhVienId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ThanhVienId");
 
-                    b.ToTable("TepTins");
+                    b.ToTable("TepTins", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ThanhTuu", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("MoTa")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
 
                     b.Property<int?>("NamDatDuoc")
                         .HasColumnType("int");
@@ -393,32 +428,25 @@ namespace GiaPha_Infrastructure.Migrations
 
                     b.HasIndex("ThanhVienId");
 
-                    b.ToTable("ThanhTuu");
+                    b.ToTable("ThanhTuus", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ThanhVien", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(UUID())");
-
-                    b.Property<string>("AnhDaiDien")
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid?>("ChiHoId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("DoiThu")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ChiHoId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("DoiId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("GioiTinh")
-                        .HasMaxLength(10)
-                        .HasColumnType("int");
+                    b.Property<bool>("GioiTinh")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("HoId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()
@@ -431,27 +459,35 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<DateTime?>("NgaySinh")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("NoiMat")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("NoiSinh")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("TieuSu")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<int>("TrangThai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChiHoId");
 
-                    b.ToTable("ThanhViens");
+                    b.HasIndex("DoiId");
+
+                    b.HasIndex("HoId");
+
+                    b.ToTable("ThanhViens", (string)null);
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ChiHo", b =>
                 {
                     b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
-                        .WithMany("CacChiHo")
-                        .HasForeignKey("IdHo")
+                        .WithMany("ChiHos")
+                        .HasForeignKey("HoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -463,6 +499,27 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Navigation("Ho");
 
                     b.Navigation("TruongChi");
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.Doi", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
+                        .WithMany("Dois")
+                        .HasForeignKey("HoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ho");
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThuyTo")
+                        .WithMany()
+                        .HasForeignKey("ThuyToId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ThuyTo");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.HonNhan", b =>
@@ -482,6 +539,41 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Navigation("Chong");
 
                     b.Navigation("Vo");
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.MoPhan", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThanhVien")
+                        .WithMany()
+                        .HasForeignKey("ThanhVienId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThanhVien");
+                });
+
+            modelBuilder.Entity("GiaPha_Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ChiHo", "ChiHo")
+                        .WithMany()
+                        .HasForeignKey("ChiHoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
+                        .WithMany()
+                        .HasForeignKey("HoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "NguoiNhan")
+                        .WithMany()
+                        .HasForeignKey("NguoiNhanId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("ChiHo");
+
+                    b.Navigation("Ho");
+
+                    b.Navigation("NguoiNhan");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.QuanHeChaCon", b =>
@@ -514,12 +606,26 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Navigation("ThanhVien");
                 });
 
+            modelBuilder.Entity("GiaPha_Domain.Entities.TaiKhoanNguoiDung", b =>
+                {
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThanhVien")
+                        .WithMany()
+                        .HasForeignKey("ThanhVienId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ThanhVien");
+                });
+
             modelBuilder.Entity("GiaPha_Domain.Entities.TepTin", b =>
                 {
-                    b.HasOne("GiaPha_Domain.Entities.Album", null)
-                        .WithMany("TepTins")
+                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThanhVien")
+                        .WithMany()
                         .HasForeignKey("ThanhVienId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThanhVien");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ThanhTuu", b =>
@@ -538,14 +644,26 @@ namespace GiaPha_Infrastructure.Migrations
                     b.HasOne("GiaPha_Domain.Entities.ChiHo", "ChiHo")
                         .WithMany("ThanhViens")
                         .HasForeignKey("ChiHoId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GiaPha_Domain.Entities.Doi", "Doi")
+                        .WithMany()
+                        .HasForeignKey("DoiId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
+                        .WithMany()
+                        .HasForeignKey("HoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ChiHo");
-                });
 
-            modelBuilder.Entity("GiaPha_Domain.Entities.Album", b =>
-                {
-                    b.Navigation("TepTins");
+                    b.Navigation("Doi");
+
+                    b.Navigation("Ho");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.ChiHo", b =>
@@ -555,7 +673,9 @@ namespace GiaPha_Infrastructure.Migrations
 
             modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
                 {
-                    b.Navigation("CacChiHo");
+                    b.Navigation("ChiHos");
+
+                    b.Navigation("Dois");
                 });
 #pragma warning restore 612, 618
         }

@@ -40,3 +40,34 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.hover-zoom:hover {
+  transform: scale(1.07);
+}
+
+
+
+
+.home-main-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #6b1d1d;
+}
+
+.home-main-desc {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 720px;
+}
+
+.home-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #7a1f1f;
+}
+
+.home-section-desc {
+  color: #666;
+  max-width: 600px;
+}

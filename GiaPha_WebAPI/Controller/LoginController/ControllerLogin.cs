@@ -5,7 +5,10 @@ using GiaPha_Application.Features.Auth.Command.Login;
 using GiaPha_Application.Features.Auth.Command.Register;
 using GiaPha_Application.Features.Auth.Queries.CheckExistEmail;
 using GiaPha_Application.Features.Auth.Queries.CheckExistUsername;
-using GiaPha_Domain.Enums;
+
+using GiaPha_Application.Features.Auth.Command.SwitchHo;
+
+
 using GiaPha_WebAPI.Controller.LoginController;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -42,22 +45,7 @@ public class ControllerLogin : ControllerBase
 
         return Ok(result);
     }
-    // [HttpPost("/register")]
-    // public async Task<IActionResult> Register([FromBody] RegisterCommand request)
-    // {
-    //     var command = new RegisterCommand
-    //     {
-    //         TenDangNhap = request.TenDangNhap,
-    //         Email = request.Email,
-    //         MatKhau = request.MatKhau,
-    //         SoDienThoai = request.SoDienThoai,
-    //         GioiTinh = request.GioiTinh,
-    //     };
 
-    //     var result = await _mediator.Send(command);
-
-    //     return Ok(result);
-    // }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     {
@@ -67,12 +55,8 @@ public class ControllerLogin : ControllerBase
             MatKhau = request.Password,
             Email = request.Email,
             SoDienThoai = request.PhoneNumber,
-            GioiTinh = request.Gender switch
-            {
-                1 => GioiTinh.Nam,
-                2 => GioiTinh.Nu,
-                _ => GioiTinh.Khac
-            }
+            GioiTinh = request.gioiTinh
+           
         };
 
         var result = await _mediator.Send(command);
@@ -144,4 +128,17 @@ public class ControllerLogin : ControllerBase
             
         return Ok(result.Data); // Trả về true/false
     }
+
+    [HttpPost("switch-ho")]
+    public async Task<IActionResult> SwitchHo([FromBody] SwitchHoCommand command)
+    {
+        var result = await _mediator.Send(command);
+        
+        if (!result.IsSuccess)
+            return BadRequest(result.ErrorMessage);
+            
+        return Ok(result.Data); // LoginRespone với token mới
+    }
+
+   
 }   

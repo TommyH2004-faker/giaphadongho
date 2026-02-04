@@ -282,7 +282,8 @@ const DangKyNguoiDung: React.FC = () => {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [gender, setGender] = useState<number>(1); // 1=Nam, 2=Nữ, 3=Khác
+    // gender là bool 
+    const [gender, setGender] = useState<number>(0); // 1 = Nam, 2 = Nữ, 3 = Khác
 
     // Khai báo các biến lỗi
     const [errorUsername, setErrorUsername] = useState("");

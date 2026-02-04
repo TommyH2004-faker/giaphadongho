@@ -14,8 +14,6 @@ public class CreateThanhVienEvent : IDomainEventWrapper<ThanhVienCreated>
     public Guid Id => DomainEvent.Id;
     public string Email => DomainEvent.Email;
     public string HoTen => DomainEvent.HoTen;
-    public Guid? ChiHoId => DomainEvent.ChiHoId;
-    public Guid? HoId => DomainEvent.HoId;
     public DateTime CreatedAt => DomainEvent.CreatedAt;
     public DateTime OccurredOn => DomainEvent.OccurredOn;
     public CreateThanhVienEvent(ThanhVienCreated domainEvent)

@@ -50,6 +50,16 @@ public class ThanhVienRepository : IThanhVienRepository
         return Result<ThanhVien?>.Success(thanhVien);
     }
 
+    public async Task<Result<List<ThanhVien>>> GetThanhVienByEmailAsync(string email)
+    {
+       throw new NotImplementedException();
+    }
+
+    public async Task<Result<List<ThanhVien>>> GetThanhVienByUserIdAsync(Guid userId)
+    {
+       throw new NotImplementedException();
+    }
+
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

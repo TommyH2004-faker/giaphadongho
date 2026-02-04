@@ -1,33 +1,25 @@
 using GiaPha_Domain.Common;
-using GiaPha_Domain.Enums;
 using static GiaPha_Domain.Events.UserEvents;
 
 namespace GiaPha_Domain.Entities;
+
 public class TaiKhoanNguoiDung :IHasDomainEvents
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
-
+    public Guid Id { get; private set; }
     public string TenDangNhap { get; private set; } = null!;
-    public string MatKhauMaHoa { get; private set; } = null!;
+    public string MatKhau { get; private set; } = null!;
     public string Email { get; private set; } = null!;
     public string? Avatar { get; private set; }
-    public GioiTinh GioiTinh { get; private set; }
-    public string Role { get; private set; } = null!;
-    // QuanTri, BienTap, Xem
-    public string? ActivationCode { get; private set; }
-    public bool Enabled { get; private set; } 
-    public DateTime? RefreshTokenExpiry { get; private set; }
-    public string? RefreshToken { get; private set; }
-    
-    // Relationship với ThanhVien
-    public Guid? ThanhVienId { get; private set; }
-    public ThanhVien? ThanhVien { get; private set; }
-    // phone number
+    public bool GioiTinh { get; private set; }
     public string? SoDienThoai { get; private set; }
-    
-    // Relationship với ChiHo (dùng cho phân quyền thông báo)
-    public Guid? ChiHoId { get; private set; }
-    public ChiHo? ChiHo { get; private set; }
+    public string Role { get; private set; } = "User";
+    public bool Enabled { get; private set; }
+    public string? ActivationCode { get; private set; }
+    public string? RefreshToken { get; private set; }
+    public DateTime? RefreshTokenExpiry { get; private set; }
+
+    public Guid ThanhVienId { get; set; }
+    public ThanhVien ThanhVien { get; set; } = null!;
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => DomainEventsInternal.AsReadOnly();
     private List<IDomainEvent> DomainEventsInternal { get; } = new List<IDomainEvent>();
@@ -37,9 +29,9 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
      public static TaiKhoanNguoiDung Register(
         string TenDangNhap,
         string email,
+        bool gioiTinh,
         string MatKhauMaHoa,
         string? SoDienThoai,
-        GioiTinh gioiTinh,
         string role)
         {
             if (string.IsNullOrWhiteSpace(TenDangNhap))
@@ -55,14 +47,14 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
 
             var user = new TaiKhoanNguoiDung
             {
+                Id = Guid.NewGuid(),
                 TenDangNhap = TenDangNhap,
                 Email = email,
-                MatKhauMaHoa = MatKhauMaHoa,
-                GioiTinh = gioiTinh,
+                MatKhau = MatKhauMaHoa,
                 Role = role,
-                ActivationCode = activationCode,
+                GioiTinh = gioiTinh,
                 Enabled = false,
-                SoDienThoai = SoDienThoai
+                ActivationCode = activationCode
             };
             return user;
         }
@@ -81,7 +73,7 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
             if (string.IsNullOrWhiteSpace(newPasswordHash))
                 throw new ArgumentException("PasswordHash required");
 
-            MatKhauMaHoa = newPasswordHash;
+            MatKhau = newPasswordHash;
         }
 
         public void Activate()
@@ -141,20 +133,10 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
             if (string.IsNullOrWhiteSpace(newPasswordHash))
                 throw new ArgumentException("New password hash required");
 
-            MatKhauMaHoa = newPasswordHash;
+            MatKhau = newPasswordHash;
         }
         
-        // Link với ThanhVien
-        public void LinkToThanhVien(Guid thanhVienId)
-        {
-            ThanhVienId = thanhVienId;
-        }
         
-        // Set ChiHo cho user
-        public void SetChiHo(Guid chiHoId)
-        {
-            ChiHoId = chiHoId;
-        }
         
         public void RaiseForgotPasswordEvent(string plainPassword)
         {

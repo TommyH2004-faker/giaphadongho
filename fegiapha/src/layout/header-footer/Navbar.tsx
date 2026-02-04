@@ -100,6 +100,7 @@ function Navbar() {
   const filteredNotifications = getFilteredNotifications();
 
   return (
+   
     <nav className="navbar navbar-expand-lg custom-navbar navbar-yellow bg-yellow">
       <div className="container-fluid">
 
@@ -122,13 +123,13 @@ function Navbar() {
             </li>
 
             <li className='nav-item'>
-              <NavLink className='nav-link' to='/about'>Tính năng </NavLink>
+              <NavLink className='nav-link' to='/tinh-nang'>Tính năng </NavLink>
             </li>
             <li className='nav-item'>
-              <NavLink className='nav-link' to='/about'>Bảng giá </NavLink>
+              <NavLink className='nav-link' to='/bang-gia'>Bảng giá </NavLink>
             </li>
             <li className='nav-item'>
-              <NavLink className='nav-link' to='/about'>Tin tức </NavLink>
+              <NavLink className='nav-link' to='/tin-tuc'>Tin tức </NavLink>
             </li>
             <li className='nav-item'>
               <Link className='nav-link' to={"/policy"}>Chính sách</Link>
@@ -299,6 +300,7 @@ function Navbar() {
 
       </div>
     </nav>
+
   );
 }
 

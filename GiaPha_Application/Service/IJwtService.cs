@@ -5,10 +5,11 @@ namespace GiaPha_Application.Service
 {
     public interface IJwtService
     {
-        string GenerateToken(TaiKhoanNguoiDung user);
+        string GenerateToken(TaiKhoanNguoiDung user, Guid? currentHoId = null);
         string GenerateRefreshToken();
         int? ValidateToken(string token);
         DateTime GetTokenExpiration();
         DateTime GetRefreshTokenExpiration();
+        Guid? GetCurrentHoIdFromToken(string token);
     }
 }

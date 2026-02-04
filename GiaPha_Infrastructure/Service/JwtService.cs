@@ -19,20 +19,12 @@ namespace GiaPha_Infrastructure.Service
             _configuration = configuration;
         }
 
-        public string GenerateToken(TaiKhoanNguoiDung user)
+        public string GenerateToken(TaiKhoanNguoiDung user, Guid? currentHoId = null)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            // var claims = new[]
-            // {
-            //     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            //     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            //     new Claim("Name", user.TenDangNhap),
-            //     new Claim(ClaimTypes.Role, user.Role ?? "User"),
-            //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            // };
-            var claims = new[]
+            var claimsList = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
@@ -40,6 +32,14 @@ namespace GiaPha_Infrastructure.Service
                 new Claim("role", user.Role ?? "USER"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // Thêm HoId nếu có
+            if (currentHoId.HasValue)
+            {
+                claimsList.Add(new Claim("currentHoId", currentHoId.Value.ToString()));
+            }
+
+            var claims = claimsList.ToArray();
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JwtSettings:Issuer"],
@@ -100,6 +100,40 @@ namespace GiaPha_Infrastructure.Service
         public DateTime GetRefreshTokenExpiration()
         {
             return DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpirationHours"]));
+        }
+
+        public Guid? GetCurrentHoIdFromToken(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!);
+                
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["JwtSettings:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = _configuration["JwtSettings:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var hoIdClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == "currentHoId");
+                
+                if (hoIdClaim != null && Guid.TryParse(hoIdClaim.Value, out Guid hoId))
+                {
+                    return hoId;
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

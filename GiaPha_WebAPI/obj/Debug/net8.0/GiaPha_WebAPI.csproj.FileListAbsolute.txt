@@ -13,6 +13,7 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\FluentValidation.DependencyInject
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Humanizer.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\MediatR.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\MediatR.Contracts.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.Build.Locator.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
@@ -38,6 +39,8 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Primitives.d
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.OpenApi.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Mono.TextTemplating.dll
@@ -140,6 +143,7 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.AssemblyInfo.cs
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.csproj.CoreCompileInputs.cache
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.MvcApplicationPartsAssemblyInfo.cs
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.MvcApplicationPartsAssemblyInfo.cache
+D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.sourcelink.json
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -154,7 +158,3 @@ D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\refint\GiaPha_WebAPI.dll
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.pdb
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.genruntimeconfig.cache
 D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\ref\GiaPha_WebAPI.dll
-D:\GiaPhaDongHo\GiaPha_WebAPI\obj\Debug\net8.0\GiaPha_WebAPI.sourcelink.json
-D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
-D:\GiaPhaDongHo\GiaPha_WebAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

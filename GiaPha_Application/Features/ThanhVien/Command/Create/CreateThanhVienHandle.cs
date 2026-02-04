@@ -20,12 +20,11 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
        var thanhVien = GiaPha_Domain.Entities.ThanhVien.Create(
             request.HoTen,
             request.Email,
-            request.GioiTinh,
+            request.GioiTinh ,
             request.NgaySinh,
             request.NoiSinh,
             null,
             null,
-            request.DoiThu,
             request.TieuSu,
             null,
             request.ChiHoId
@@ -43,7 +42,7 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
         if (request.ChiHoId.HasValue)
         {
             var chiHo = await _chiHoRepository.GetChiHoByIdAsync(request.ChiHoId.Value);
-            hoId = chiHo.Data?.IdHo;
+    
         }
         
         thanhVien.RaiseCreatedEventWithHoId(hoId);
@@ -58,15 +57,13 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
             Id = createdThanhVien.Data.Id,
             HoTen = createdThanhVien.Data.HoTen,
             Email = request.Email,
-            gioiTinh = createdThanhVien.Data.GioiTinh,
+    
             NgaySinh = createdThanhVien.Data.NgaySinh ?? DateTime.MinValue,
             NoiSinh = createdThanhVien.Data.NoiSinh ?? string.Empty,
             ngayMat = createdThanhVien.Data.NgayMat,
-            noiMat = createdThanhVien.Data.NoiMat,
-            DoiThu = createdThanhVien.Data.DoiThu,
+  
             TieuSu = createdThanhVien.Data.TieuSu,
-            AnhDaiDien = createdThanhVien.Data.AnhDaiDien,
-            ChiHoId = createdThanhVien.Data.ChiHoId
+          
         };
 
         return Result<ThanhVienResponse>.Success(thanhVienResponse);

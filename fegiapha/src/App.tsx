@@ -8,7 +8,10 @@ import DangNhap from './layout/User/DangNhap';
 import DangKyNguoiDung from './layout/User/DangKyNguoiDung';
 import KichHoatTaiKhoan from './layout/User/KichHoatTaiKhoan';
 import { ForgotPassword } from './layout/User/ForgotPassword';
-import HomePage from './layout/homepage/HomePage';
+import HomePage from './layout/homepage/Homepage';
+import ChinhSach from './page/ChinhSach';
+import TinTuc from './page/TinTuc';
+
 
 const App = () => {
     const [reloadAvatar] = useState(0);
@@ -32,9 +35,10 @@ const App = () => {
                     <Route path='/' element={<HomePage />} />
                     <Route path='dangnhap' element={<DangNhap />} />
                     <Route path='dangky' element={<DangKyNguoiDung />} />
-                    <Route path='policy' element={<div className="container mt-5"><h1>Chính sách</h1></div>} />
+                    <Route path='policy' element={<ChinhSach />} />
                     <Route path='/active/:code/:userId' element={<KichHoatTaiKhoan />} />
                     <Route path='/forgot-password' element={<ForgotPassword />} />
+                    <Route path='tin-tuc' element={<TinTuc />} />
                     {/* Nếu không tìm thấy trang */}
                     <Route path='*' element={<Error404Page />} />
                 </Routes>

@@ -2,26 +2,53 @@ namespace GiaPha_Domain.Entities;
 
 public class Notification
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid Id { get; private set; }
     public string NoiDung { get; private set; } = null!;
-    public Guid? NguoiNhanId { get; private set; }
-    public bool IsGlobal { get; private set; }
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    public bool DaDoc { get; private set; }
-    public Guid? ChiHoId { get; private set; }
-    public Guid? HoId { get; private set; } // Thông báo cho cả Họ
-    
-    public ChiHo? ChiHo { get; private set; }
-    public Ho? Ho { get; private set; }
 
-    public Notification(string noiDung, bool isGlobal = false, Guid? nguoiNhanId = null, Guid? chiHoId = null, Guid? hoId = null)
-    {
-        NoiDung = noiDung;
-        IsGlobal = isGlobal;
-        NguoiNhanId = nguoiNhanId;
-        DaDoc = false;
-        ChiHoId = chiHoId;
-        HoId = hoId;
-    }
+    // ===== Người nhận cụ thể =====
+    public Guid? NguoiNhanId { get; set; }
+    public ThanhVien? NguoiNhan { get; set; }
+
+    // ===== Phạm vi =====
+    public bool IsGlobal { get; private set; }
+
+    public Guid? ChiHoId { get; set; }
+    public ChiHo? ChiHo { get; set; }
+
+    public Guid? HoId { get; set; }
+    public Ho? Ho { get; set; }
+
+    // ===== Trạng thái =====
+    public bool DaDoc { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+
     private Notification() { }
+
+    public static Notification Create(
+        string noiDung,
+        bool isGlobal = false,
+        Guid? nguoiNhanId = null,
+        Guid? chiHoId = null,
+        Guid? hoId = null)
+    {
+        if (string.IsNullOrWhiteSpace(noiDung))
+            throw new ArgumentException("Nội dung không được rỗng");
+
+        return new Notification
+        {
+            Id = Guid.NewGuid(),
+            NoiDung = noiDung,
+            IsGlobal = isGlobal,
+            NguoiNhanId = nguoiNhanId,
+            ChiHoId = chiHoId,
+            HoId = hoId,
+            DaDoc = false,
+            CreatedAt = DateTime.UtcNow
+        };
+    }
+
+    public void MarkAsRead()
+    {
+        DaDoc = true;
+    }
 }

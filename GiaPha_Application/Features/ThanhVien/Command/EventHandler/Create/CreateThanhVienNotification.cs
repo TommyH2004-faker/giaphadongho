@@ -27,22 +27,17 @@ public class CreateThanhVienNotification : INotificationHandler<CreateThanhVienE
     {
         _logger.LogInformation("📝 [THANHVIEN] Tạo notification cho thành viên mới ID {Id}", notification.Id);
 
-        // Lấy ChiHoId và HoId trực tiếp từ event
-        var chiHoId = notification.ChiHoId;
-        var hoId = notification.HoId;
-        
         var noiDung = $"Thành viên mới đã được tạo: {notification.HoTen} vào lúc {notification.CreatedAt}.";
         
-        var newNotification = new Notification(
+        var newNotification = GiaPha_Domain.Entities.Notification.Create(
             noiDung: noiDung,
             isGlobal: false,
             nguoiNhanId: null,
-            chiHoId: chiHoId,
-            hoId: hoId
+            chiHoId: null
         );
         
         await _notificationRepository.AddAsync(newNotification);
         
-        _logger.LogInformation("✅ Đã tạo notification cho ChiHo {ChiHoId}, Ho {HoId}", chiHoId, hoId);
+        _logger.LogInformation("✅ Đã tạo notification cho thành viên mới ID {Id}", notification.Id);
     }
 }

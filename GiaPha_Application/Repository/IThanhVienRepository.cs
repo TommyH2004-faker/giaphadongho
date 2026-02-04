@@ -9,6 +9,8 @@ public interface IThanhVienRepository
     Task<Result<IEnumerable<ThanhVien>>> GetAllThanhVienAsync();
     Task<Result<ThanhVien?>> GetThanhVienByIdAsync(Guid thanhVienId);
     Task<Result<ThanhVien?>> GetThanhVienByNameAsync(string hoTen);
+    Task<Result<List<ThanhVien>>> GetThanhVienByEmailAsync(string email);
+    Task<Result<List<ThanhVien>>> GetThanhVienByUserIdAsync(Guid userId);
     Task SaveChangesAsync();
     Task<Result<ThanhVien>> UpdateThanhVienAsync(ThanhVien thanhVien);
 }
