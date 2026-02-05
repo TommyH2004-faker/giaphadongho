@@ -43,10 +43,7 @@ public class HoConfiguration : IEntityTypeConfiguration<Ho>
             .HasForeignKey(x => x.HoId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(x => x.Dois)
-            .WithOne(x => x.Ho)
-            .HasForeignKey(x => x.HoId)
-            .OnDelete(DeleteBehavior.Cascade);
+      
 
         // Indexes
         builder.HasIndex(x => x.ThuyToId);

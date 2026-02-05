@@ -56,6 +56,8 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IThanhVienRepository, ThanhVienRepository>();
 builder.Services.AddScoped<IAuditLogRepository, AuditReopository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IQuanHeChaMeRepository, QuanHeChaMeRepository>();
+builder.Services.AddScoped<IHonNhanRepository, HonNhanRepository>();
 #endregion
 
 #region MediatR + Pipeline + Validation

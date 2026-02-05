@@ -42,7 +42,10 @@ public class HoRepository : IHoRepository
         return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.TenHo == tenHo));
     }
 
-   
+    public async Task<Result<Ho?>> GetHoByThuyToIdAsync(Guid thuyToId)
+    {
+        return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.ThuyToId == thuyToId));
+    }
 
     public async Task<Result<Ho>> UpdateHoAsync(Ho ho)
     {

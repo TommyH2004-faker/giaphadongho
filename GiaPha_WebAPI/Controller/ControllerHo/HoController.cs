@@ -1,6 +1,5 @@
 
 using GiaPha_Application.Features.HoName.Command.CreateHo;
-using GiaPha_Application.Features.HoName.Command.DeleteHo;
 using GiaPha_Application.Features.HoName.Command.UpdateHo;
 using GiaPha_Application.Features.HoName.Queries.GetById;
 using MediatR;
@@ -36,6 +35,7 @@ public class HoController : ControllerBase
         var command = new UpdateHoCommand
         {
             Id = id,
+            ThuyToId = request.ThuyToId,
             TenHo = request.TenHo,
             MoTa = request.MoTa
         };
@@ -47,13 +47,6 @@ public class HoController : ControllerBase
     {
         var query = new GetHoByIdQuery { Id = id };
         var result = await _mediator.Send(query);
-        return Ok(result);
-    }
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteHo(Guid id)
-    {
-        var command = new DeleteHoCommand { Id = id };
-        var result = await _mediator.Send(command);
         return Ok(result);
     }
     [HttpGet]

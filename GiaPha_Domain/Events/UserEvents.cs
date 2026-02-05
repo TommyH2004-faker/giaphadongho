@@ -54,7 +54,7 @@ namespace GiaPha_Domain.Events
              public Guid Id { get; }
             public string Email { get; }
             public string plainPassword { get; init; } = null!;
-            public DateTime OccurredOn { get; }
+            public new DateTime OccurredOn { get; }
             public UserForgotPassword(Guid id, string email, string plainPassword, DateTime utcNow)
             {
                 Id = id;

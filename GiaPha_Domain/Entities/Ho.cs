@@ -1,6 +1,9 @@
+using GiaPha_Domain.Common;
+using static GiaPha_Domain.Events.HoEvent;
+
 namespace GiaPha_Domain.Entities;
 
-public class Ho
+public class Ho : IHasDomainEvents
 {
     // ====== Keys ======
     public Guid Id { get; private set; }
@@ -18,7 +21,10 @@ public class Ho
 
     // ====== Navigation ======
     public ICollection<ChiHo> ChiHos { get; set; } = new List<ChiHo>();
-    public ICollection<Doi> Dois { get; set; } = new List<Doi>();
+    public ICollection<ThanhVien> ThanhViens { get; set; } = new List<ThanhVien>();
+
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    private List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
 
     // ====== Constructor ======
     private Ho() { }
@@ -44,12 +50,61 @@ public class Ho
         ThuyToId = thanhVienId;
     }
 
-    public void Update(string tenHo, string? moTa)
+    public void Update(Guid? idThuyTo, string tenHo, string moTa , string queQuan )
     {
+        if(idThuyTo == Guid.Empty)
+            throw new ArgumentException("ThuyToId cannot be empty");
         if (string.IsNullOrWhiteSpace(tenHo))
             throw new ArgumentException("TenHo cannot be empty");
-
+        if(string.IsNullOrWhiteSpace(queQuan))
+            throw new ArgumentException("QueQuan cannot be empty");
+        if(string.IsNullOrWhiteSpace(moTa))
+            throw new ArgumentException("MoTa cannot be empty");
         TenHo = tenHo;
         MoTa = moTa;
+        QueQuan = queQuan;
+        ThuyToId = idThuyTo;
+        
+        // ⚡ Raise event tổng quát cho việc update họ
+        AddDomainEvent(new HoUpdatedEvent(
+            this.Id,
+            tenHo,
+            moTa,
+            queQuan,
+            idThuyTo,
+            DateTime.UtcNow
+        ));
+    }
+    // asssign thuy to
+    public void AssignThuyTo(Guid thanhVienId)
+    {
+        if (thanhVienId == Guid.Empty)
+            throw new ArgumentException("ThanhVienId cannot be empty");
+
+        ThuyToId = thanhVienId;
+    }
+    // raise event assign thuy to
+    public void RaiseAssignThuyToEvent(Guid thanhVienId)
+    {
+        AddDomainEvent(new AssignedThuyToHoEvent(
+            this.Id,
+            thanhVienId,
+            DateTime.UtcNow
+        ));
+    }
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Remove(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }

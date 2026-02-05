@@ -41,24 +41,20 @@ public class ThanhVienConfiguration : IEntityTypeConfiguration<ThanhVien>
 
         builder.Property(x => x.ChiHoId);
 
-        builder.Property(x => x.DoiId);
+     
 
         // Relationships
         builder.HasOne(x => x.Ho)
-            .WithMany()
+            .WithMany(h => h.ThanhViens)
             .HasForeignKey(x => x.HoId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // ChiHo relationship đã được định nghĩa ở ChiHoConfiguration
 
-        builder.HasOne(x => x.Doi)
-            .WithMany()
-            .HasForeignKey(x => x.DoiId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+      
         // Indexes
         builder.HasIndex(x => x.HoId);
         builder.HasIndex(x => x.ChiHoId);
-        builder.HasIndex(x => x.DoiId);
+
     }
 }

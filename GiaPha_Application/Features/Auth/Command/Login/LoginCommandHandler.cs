@@ -11,18 +11,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
 {
     private readonly IAuthRepository _authRepository;
     private readonly IJwtService _jwtService;
-    private readonly IThanhVienRepository _thanhVienRepository;
     private readonly IHoRepository _hoRepository;
 
     public LoginCommandHandler(
         IAuthRepository authRepository, 
         IJwtService jwtService,
-        IThanhVienRepository thanhVienRepository,
         IHoRepository hoRepository)
     {
         _authRepository = authRepository;
         _jwtService = jwtService;
-        _thanhVienRepository = thanhVienRepository;
         _hoRepository = hoRepository;
     }
     public async Task<Result<LoginRespone>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -49,20 +46,28 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             return Result<LoginRespone>.Failure(ErrorType.WrongPassword,"WRONG_PASSWORD"); // Mã lỗi cụ thể
         }
 
-        // 4. Lấy danh sách Ho mà User thuộc về
-        var userHos = await GetUserHosAsync(user.Id);
+        // 4. Lấy thông tin Ho nếu user có HoId
+        HoResponse? hoResponse = null;
         
-        // 5. Xử lý chọn Ho
-        Guid? selectedHoId = null;
-        if (userHos.Count == 1)
+        if (user.HoId.HasValue)
         {
-            // Tự động chọn nếu chỉ có 1 Ho
-            selectedHoId = userHos.First().HoId;
+            var hoResult = await _hoRepository.GetHoByIdAsync(user.HoId.Value);
+            if (hoResult.IsSuccess && hoResult.Data != null)
+            {
+                hoResponse = new HoResponse
+                {
+                    Id = hoResult.Data.Id,
+                    TenHo = hoResult.Data.TenHo,
+                    MoTa = hoResult.Data.MoTa,
+                    HinhAnh = hoResult.Data.HinhAnh,
+                    QueQuan = hoResult.Data.QueQuan,
+                    ThuyToId = hoResult.Data.ThuyToId
+                };
+            }
         }
-        // Nếu có nhiều Ho, frontend sẽ gọi API riêng để chọn Ho
 
-        // 6. Tạo JWT token với HoId (nếu có)
-        var token = _jwtService.GenerateToken(user, selectedHoId);
+        // 5. Tạo JWT token với HoId
+        var token = _jwtService.GenerateToken(user, user.HoId);
 
         var response = new LoginRespone
         {
@@ -70,50 +75,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             Email = user.Email,
             TenDangNhap = user.TenDangNhap,
             Role = user.Role,
-            AvailableHos = userHos.Select(h => new HoResponse 
-            {
-                Id = h.HoId,
-                TenHo = h.Ho?.TenHo
-            }).ToList(),
-            SelectedHoId = selectedHoId
+            AvailableHos = hoResponse != null ? new List<HoResponse> { hoResponse } : new List<HoResponse>(),
+            SelectedHoId = user.HoId
         };
         return Result<LoginRespone>.Success(response);
-    }
-
-    private async Task<List<(Guid HoId, Ho? Ho)>> GetUserHosAsync(Guid userId)
-    {
-        try
-        {
-            // 1. Tìm ThanhVien của User
-            var thanhViensResult = await _thanhVienRepository.GetThanhVienByUserIdAsync(userId);
-            if (!thanhViensResult.IsSuccess || thanhViensResult.Data == null || !thanhViensResult.Data.Any())
-            {
-                return new List<(Guid, Ho?)>();
-            }
-
-            // 2. Lấy Ho từ từng ThanhVien qua ThanhVienHo
-            var userHos = new List<(Guid HoId, Ho? Ho)>();
-            
-            foreach (var thanhVien in thanhViensResult.Data)
-            {
-                var hosResult = await _hoRepository.GetHosByThanhVienIdAsync(thanhVien.Id);
-                if (hosResult.IsSuccess && hosResult.Data != null)
-                {
-                    foreach (var ho in hosResult.Data)
-                    {
-                        if (!userHos.Any(uh => uh.HoId == ho.Id)) // Tránh duplicate
-                        {
-                            userHos.Add((ho.Id, ho));
-                        }
-                    }
-                }
-            }
-
-            return userHos;
-        }
-        catch
-        {
-            return new List<(Guid, Ho?)>();
-        }
     }
 }

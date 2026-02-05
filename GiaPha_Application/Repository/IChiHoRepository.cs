@@ -9,6 +9,7 @@ public interface IChiHoRepository
     Task<Result<IEnumerable<ChiHo>>> GetAllChiHoAsync();
     Task<Result<ChiHo?>> GetChiHoByIdAsync(Guid chiHoId);
     Task<Result<ChiHo?>> GetChiHoByNameAsync(string tenChiHo);
+    Task<Result<ChiHo?>> GetChiHoByNameAndHoIdAsync(string tenChiHo, Guid hoId);
     Task<Result<ThanhVien>> GetThanhVienByIdAsync(Guid truongChiId);
     Task SaveChangesAsync();
     Task<Result<ChiHo>> Update(ChiHo chiHo);

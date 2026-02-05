@@ -16,7 +16,6 @@ namespace GiaPha_Infrastructure.Db
 
     public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<ChiHo> ChiHos { get; set; }
-    public DbSet<Doi> Dois { get; set; }
     public DbSet<Ho> Hos { get; set; }
     public DbSet<MoPhan> MoPhans { get; set; }
     public DbSet<HonNhan> HonNhans { get; set; }
@@ -33,7 +32,6 @@ namespace GiaPha_Infrastructure.Db
          
             modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
             modelBuilder.ApplyConfiguration(new ChiHoConfiguration());
-            modelBuilder.ApplyConfiguration(new DoiConfiguration());
             modelBuilder.ApplyConfiguration(new MoPhanConfiguration());
             modelBuilder.ApplyConfiguration(new HoConfiguration());
             modelBuilder.ApplyConfiguration(new HonNhanConfiguration());

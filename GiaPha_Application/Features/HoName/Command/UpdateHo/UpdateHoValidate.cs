@@ -11,5 +11,11 @@ public class UpdateHoValidate : AbstractValidator<UpdateHoCommand>
 
         RuleFor(x => x.MoTa)
             .MaximumLength(500).WithMessage("Mô tả không được vượt quá 500 ký tự");
+        RuleFor(x => x.queQuan)
+            .MaximumLength(200).WithMessage("Quê quán không được vượt quá 200 ký tự");
+        RuleFor(x => x.hinhAnh)
+            .MaximumLength(500).WithMessage("Hình ảnh không được vượt quá 500 ký tự");
+
+        
     }
 }

@@ -30,12 +30,26 @@ public class UpdateHoHandle : IRequestHandler<UpdateHoCommand, Result<HoResponse
             return Result<HoResponse>.Failure(ErrorType.Conflict, "Tên họ đã tồn tại");
         }
 
+        // Kiểm tra ThuyToId đã là thủy tổ của họ khác chưa
+        if (request.ThuyToId.HasValue && request.ThuyToId.Value != Guid.Empty)
+        {
+            var hoCoThuyTo = await _hoRepository.GetHoByThuyToIdAsync(request.ThuyToId.Value);
+            if (hoCoThuyTo != null && hoCoThuyTo.Data != null && ho.Data != null && hoCoThuyTo.Data.Id != ho.Data.Id)
+            {
+                return Result<HoResponse>.Failure(
+                    ErrorType.Conflict, 
+                    $"Thành viên này đã là thủy tổ của họ '{hoCoThuyTo.Data.TenHo}'. Một người chỉ có thể là thủy tổ của một họ duy nhất."
+                );
+            }
+        }
+
         // Cập nhật thông tin
         if (ho.Data == null)
         {
             return Result<HoResponse>.Failure(ErrorType.NotFound, "Dữ liệu Họ không tồn tại");
         }
-        ho.Data.Update(request.TenHo, request.MoTa);
+        // Update(Guid idThuyTo, string tenHo, string moTa , string queQuan )
+        ho.Data.Update(request.ThuyToId, request.TenHo, request.MoTa ?? string.Empty, request.queQuan ?? string.Empty);
         var updatedHo = await _hoRepository.UpdateHoAsync(ho.Data);
         if (updatedHo == null || updatedHo.Data == null)
         {

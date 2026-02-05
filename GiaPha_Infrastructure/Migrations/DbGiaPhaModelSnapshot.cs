@@ -91,29 +91,6 @@ namespace GiaPha_Infrastructure.Migrations
                     b.ToTable("ChiHos", (string)null);
                 });
 
-            modelBuilder.Entity("GiaPha_Domain.Entities.Doi", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("HoId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("SoDoi")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TenDoi")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HoId");
-
-                    b.ToTable("Dois", (string)null);
-                });
-
             modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
                 {
                     b.Property<Guid>("Id")
@@ -160,9 +137,15 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<DateTime?>("NgayKetHon")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime?>("NgayLyHon")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("NoiKetHon")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("TrangThai")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<Guid>("VoId")
                         .HasColumnType("char(36)");
@@ -333,6 +316,9 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<bool>("GioiTinh")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<Guid?>("HoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("MatKhau")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -361,18 +347,15 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid?>("ThanhVienId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("HoId");
+
                     b.HasIndex("TenDangNhap")
                         .IsUnique();
-
-                    b.HasIndex("ThanhVienId");
 
                     b.ToTable("TaiKhoanNguoiDungs", (string)null);
                 });
@@ -433,10 +416,10 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ChiHoId")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Avatar")
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid>("DoiId")
+                    b.Property<Guid>("ChiHoId")
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("GioiTinh")
@@ -453,8 +436,11 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Property<DateTime?>("NgayMat")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("NgaySinh")
+                    b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NoiMat")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NoiSinh")
                         .HasMaxLength(500)
@@ -464,16 +450,14 @@ namespace GiaPha_Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
 
-                    b.Property<int>("TrangThai")
+                    b.Property<bool>("TrangThai")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChiHoId");
-
-                    b.HasIndex("DoiId");
 
                     b.HasIndex("HoId");
 
@@ -496,17 +480,6 @@ namespace GiaPha_Infrastructure.Migrations
                     b.Navigation("Ho");
 
                     b.Navigation("TruongChi");
-                });
-
-            modelBuilder.Entity("GiaPha_Domain.Entities.Doi", b =>
-                {
-                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
-                        .WithMany("Dois")
-                        .HasForeignKey("HoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ho");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.Ho", b =>
@@ -605,12 +578,12 @@ namespace GiaPha_Infrastructure.Migrations
 
             modelBuilder.Entity("GiaPha_Domain.Entities.TaiKhoanNguoiDung", b =>
                 {
-                    b.HasOne("GiaPha_Domain.Entities.ThanhVien", "ThanhVien")
+                    b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
                         .WithMany()
-                        .HasForeignKey("ThanhVienId")
+                        .HasForeignKey("HoId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("ThanhVien");
+                    b.Navigation("Ho");
                 });
 
             modelBuilder.Entity("GiaPha_Domain.Entities.TepTin", b =>
@@ -643,21 +616,13 @@ namespace GiaPha_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GiaPha_Domain.Entities.Doi", "Doi")
-                        .WithMany()
-                        .HasForeignKey("DoiId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("GiaPha_Domain.Entities.Ho", "Ho")
-                        .WithMany()
+                        .WithMany("ThanhViens")
                         .HasForeignKey("HoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ChiHo");
-
-                    b.Navigation("Doi");
 
                     b.Navigation("Ho");
                 });
@@ -671,7 +636,7 @@ namespace GiaPha_Infrastructure.Migrations
                 {
                     b.Navigation("ChiHos");
 
-                    b.Navigation("Dois");
+                    b.Navigation("ThanhViens");
                 });
 #pragma warning restore 612, 618
         }

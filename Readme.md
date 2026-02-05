@@ -38,18 +38,21 @@ dotnet ef migrations remove --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add InitialCreate --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add AddColumnsToHonNhan --startup-project ../GiaPha_WebAPI
 dotnet ef database update
-dotnet ef migrations add fixDatabase --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseTree --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseNew --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseEnums --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseThanhVien --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseAudit --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add fixDatabaseHo --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add add Fixtaikhoannguoi --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add add FixDb --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add add FixThanhVienDatabase --startup-project ../GiaPha_WebAPI
 dotnet ef database update --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add AddThanhVienIdToTaiKhoanNguoiDung --startup-project 
 dotnet ef migrations add addSoDienThoai --startup-project ../GiaPha_WebAPI
-
+ChangeThanhVienIdToHoId dotnet ef migrations add ChangeThanhVienIdToHoId  --startup-project ../GiaPha_WebAPI
 dotnet ef migrations add RemoveColumnsDoiToThanhVien --startup-project ../GiaPha_WebAPI
+dotnet ef migrations add fixDatabaseTvienwithHo --startup-project ../GiaPha_WebAPI
 # chuyển hết về net 8.0 rồi sau đó chạy 
 dotnet clean
 dotnet restore

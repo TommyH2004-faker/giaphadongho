@@ -18,8 +18,8 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
     public string? RefreshToken { get; private set; }
     public DateTime? RefreshTokenExpiry { get; private set; }
 
-    public Guid? ThanhVienId { get; set; }
-    public ThanhVien? ThanhVien { get; set; }
+    public Guid? HoId { get; set; }
+    public Ho? Ho { get; set; }
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => DomainEventsInternal.AsReadOnly();
     private List<IDomainEvent> DomainEventsInternal { get; } = new List<IDomainEvent>();

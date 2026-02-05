@@ -12,5 +12,6 @@ public class RequestHo
     {
         public string TenHo { get; set; } = null!;
         public string? MoTa { get; set; }
+        public Guid? ThuyToId { get; set; }
     }
 }

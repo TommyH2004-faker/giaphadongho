@@ -13,10 +13,11 @@ public class CreateChiHoHandle : IRequestHandler<CreateChiHoCommand, Result<ChiH
     }
     public async Task<Result<ChiHoResponse>> Handle(CreateChiHoCommand request, CancellationToken cancellationToken)
     {
-        var existingChiHo = await _chiHoRepository.GetChiHoByNameAsync(request.TenChiHo);
-        if (existingChiHo != null)
+        // Kiểm tra chi họ đã tồn tại trong cùng một họ chưa
+        var existingChiHo = await _chiHoRepository.GetChiHoByNameAndHoIdAsync(request.TenChiHo, request.IdHo);
+        if (existingChiHo != null && existingChiHo.Data != null)
         {
-            return Result<ChiHoResponse>.Failure(ErrorType.Conflict, "Chi Họ đã tồn tại");
+            return Result<ChiHoResponse>.Failure(ErrorType.Conflict, "Chi Họ đã tồn tại trong họ này");
         }
         var chiHo = GiaPha_Domain.Entities.ChiHo.Create(request.TenChiHo, request.IdHo, request.MoTa);
         var createdChiHo = await _chiHoRepository.CreateChiHoAsync(chiHo);

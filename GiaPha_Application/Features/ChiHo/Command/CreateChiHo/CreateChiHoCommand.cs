@@ -8,5 +8,6 @@ public record CreateChiHoCommand : IRequest<Result<ChiHoResponse>>
     public Guid IdHo { get; init; }
     public string TenChiHo { get; init; } = null!;
     public string? MoTa { get; init; }
-    public  Guid TruongChiId { get; init; }
+    public Guid Idho { get; init; }
+    public  Guid? TruongChiId { get; init; }
 }

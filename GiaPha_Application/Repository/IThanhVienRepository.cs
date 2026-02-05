@@ -13,4 +13,5 @@ public interface IThanhVienRepository
     Task<Result<List<ThanhVien>>> GetThanhVienByUserIdAsync(Guid userId);
     Task SaveChangesAsync();
     Task<Result<ThanhVien>> UpdateThanhVienAsync(ThanhVien thanhVien);
+    Task<Result<ThanhVien?>> GetHoById(Guid conId);
 }

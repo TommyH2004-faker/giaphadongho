@@ -52,7 +52,7 @@ public class ThanhVienRepository : IThanhVienRepository
 
     public async Task<Result<List<ThanhVien>>> GetThanhVienByEmailAsync(string email)
     {
-       throw new NotImplementedException();
+       throw new NotImplementedException(); 
     }
 
     public async Task<Result<List<ThanhVien>>> GetThanhVienByUserIdAsync(Guid userId)
@@ -75,5 +75,11 @@ public class ThanhVienRepository : IThanhVienRepository
         _context.ThanhViens.Update(thanhVien);
         await _context.SaveChangesAsync();
         return Result<ThanhVien>.Success(thanhVien);
+    }
+
+    public async Task<Result<ThanhVien?>> GetHoById(Guid conId)
+    {
+        var thanhVien = await _context.ThanhViens.FindAsync(conId);
+        return Result<ThanhVien?>.Success(thanhVien);
     }
 }

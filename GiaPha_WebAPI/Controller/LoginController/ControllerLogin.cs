@@ -6,7 +6,6 @@ using GiaPha_Application.Features.Auth.Command.Register;
 using GiaPha_Application.Features.Auth.Queries.CheckExistEmail;
 using GiaPha_Application.Features.Auth.Queries.CheckExistUsername;
 
-using GiaPha_Application.Features.Auth.Command.SwitchHo;
 
 
 using GiaPha_WebAPI.Controller.LoginController;
@@ -129,16 +128,6 @@ public class ControllerLogin : ControllerBase
         return Ok(result.Data); // Trả về true/false
     }
 
-    [HttpPost("switch-ho")]
-    public async Task<IActionResult> SwitchHo([FromBody] SwitchHoCommand command)
-    {
-        var result = await _mediator.Send(command);
-        
-        if (!result.IsSuccess)
-            return BadRequest(result.ErrorMessage);
-            
-        return Ok(result.Data); // LoginRespone với token mới
-    }
 
-   
+
 }   

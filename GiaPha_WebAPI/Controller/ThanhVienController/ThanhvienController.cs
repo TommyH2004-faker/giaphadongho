@@ -18,7 +18,7 @@ public class ThanhVienController : ControllerBase
         var result = await _mediator.Send(command);
 
         if (!result.IsSuccess)
-            return BadRequest(result.ErrorType.ToString());
+            return BadRequest(result);
         return Ok(result.Data);
     }
 }

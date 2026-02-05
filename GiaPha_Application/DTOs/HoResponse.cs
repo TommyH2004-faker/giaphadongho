@@ -6,4 +6,5 @@ public class HoResponse
     public string? MoTa { get; set; }
     public string? HinhAnh { get; set; }
     public string? QueQuan { get; set; }
+    public Guid? ThuyToId { get; set; }
 }

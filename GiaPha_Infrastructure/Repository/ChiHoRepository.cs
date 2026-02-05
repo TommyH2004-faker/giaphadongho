@@ -49,6 +49,12 @@ public class ChiHoRepository : IChiHoRepository
         return Result<ChiHo?>.Success(chiHo);
     }
 
+    public async Task<Result<ChiHo?>> GetChiHoByNameAndHoIdAsync(string tenChiHo, Guid hoId)
+    {
+        var chiHo = await _context.ChiHos.FirstOrDefaultAsync(c => c.TenChiHo == tenChiHo && c.HoId == hoId);
+        return Result<ChiHo?>.Success(chiHo);
+    }
+
     public async Task<Result<ThanhVien>> GetThanhVienByIdAsync(Guid truongChiId)
     {
         var thanhVien = await _context.ThanhViens.FindAsync(truongChiId);

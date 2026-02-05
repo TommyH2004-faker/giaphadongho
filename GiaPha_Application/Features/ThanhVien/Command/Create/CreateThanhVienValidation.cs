@@ -6,27 +6,20 @@ public class CreateThanhVienValidation: AbstractValidator<CreateThanhVienCommand
 {
     public CreateThanhVienValidation()
     {
+
         RuleFor(x => x.HoTen)
             .NotEmpty().WithMessage("Họ tên không được để trống")
-            .MaximumLength(100).WithMessage("Họ tên không được vượt quá 100 ký tự");
-
-        RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email không được để trống")
-            .EmailAddress().WithMessage("Email không hợp lệ")
-            .MaximumLength(100).WithMessage("Email không được vượt quá 100 ký tự");
-
-        RuleFor(x => x.NgaySinh)
-            .LessThan(DateTime.Now).WithMessage("Ngày sinh phải nhỏ hơn ngày hiện tại");
-
+            .MaximumLength(200).WithMessage("Họ tên không được vượt quá 200 ký tự");
         RuleFor(x => x.NoiSinh)
-            .NotEmpty().WithMessage("Nơi sinh không được để trống")
             .MaximumLength(200).WithMessage("Nơi sinh không được vượt quá 200 ký tự");
-
-        RuleFor(x => x.DoiThu)
-            .GreaterThan(0).WithMessage("Đời thứ phải lớn hơn 0");
         RuleFor(x => x.TieuSu)
             .MaximumLength(1000).WithMessage("Tiểu sử không được vượt quá 1000 ký tự");
+        RuleFor(x => x.TrangThai)
+            .NotEmpty().WithMessage("Trạng thái không được để trống");
+        RuleFor(x => x.HoId)
+            .NotEmpty().WithMessage("Hộ ID không được để trống");
         RuleFor(x => x.ChiHoId)
-            .NotEmpty().WithMessage("Chi hộ ID không được để trống");
+            .NotEmpty().WithMessage("Chi Họ ID không được để trống");
+        
     }
 }

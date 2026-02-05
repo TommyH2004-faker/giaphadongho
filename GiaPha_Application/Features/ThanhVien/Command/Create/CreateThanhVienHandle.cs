@@ -2,50 +2,52 @@ using GiaPha_Application.Common;
 using GiaPha_Application.DTOs;
 using GiaPha_Application.Repository;
 using MediatR;
-
+using GiaPha_Domain.Entities;
 namespace GiaPha_Application.Features.ThanhVien.Command.Create;
 public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Result<ThanhVienResponse>>
 {
     private readonly IThanhVienRepository _thanhVienRepository;
     private readonly IChiHoRepository _chiHoRepository;
+    private readonly IHoRepository _hoRepository;
 
-    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository, IChiHoRepository chiHoRepository)
+    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository, IChiHoRepository chiHoRepository, IHoRepository hoRepository)
     {
         _thanhVienRepository = thanhVienRepository;
         _chiHoRepository = chiHoRepository;
+        _hoRepository = hoRepository;
     }
 
     public async Task<Result<ThanhVienResponse>> Handle(CreateThanhVienCommand request, CancellationToken cancellationToken)
     {
-       var thanhVien = GiaPha_Domain.Entities.ThanhVien.Create(
-            request.HoTen,
-            request.Email,
-            request.GioiTinh ,
-            request.NgaySinh,
-            request.NoiSinh,
-            null,
-            null,
-            request.TieuSu,
-            null,
-            request.ChiHoId
-        );
-        // check trùng email 
-        var existEmail = await _thanhVienRepository.GetThanhVienByNameAsync(request.HoTen);
-        if (existEmail != null && existEmail.Data != null)
+        var ho = await _hoRepository.GetHoByIdAsync(request.HoId);
+    if (ho == null || ho.Data == null)
+    {
+        return Result<ThanhVienResponse>.Failure(ErrorType.Validation, "Họ không tồn tại");
+    }
+
+    // Kiểm tra ChiHoId có thuộc HoId không (nếu có ChiHoId)
+    if (request.ChiHoId.HasValue)
+    {
+        var chiHo = await _chiHoRepository.GetChiHoByIdAsync(request.ChiHoId.Value);
+        if (chiHo == null || chiHo.Data == null || chiHo.Data.HoId != request.HoId)
         {
-            return Result<ThanhVienResponse>.Failure(ErrorType.Conflict, "Thành viên với email này đã tồn tại");
+            return Result<ThanhVienResponse>.Failure(ErrorType.Validation, "Chi họ không thuộc họ này");
         }
+    }
+    
+       var thanhVien = GiaPha_Domain.Entities.ThanhVien.Create(
+        request.HoTen,
+        request.GioiTinh,
+        request.NgaySinh,
+        request.NoiSinh,
+        request.TieuSu,
+        request.ChiHoId,
+        request.TrangThai,
+        request.HoId
+        );
+        // check hoid exists
         var createdThanhVien = await _thanhVienRepository.CreateThanhVienAsync(thanhVien);
         
-        // Lấy HoId từ ChiHo nếu có
-        Guid? hoId = null;
-        if (request.ChiHoId.HasValue)
-        {
-            var chiHo = await _chiHoRepository.GetChiHoByIdAsync(request.ChiHoId.Value);
-    
-        }
-        
-        thanhVien.RaiseCreatedEventWithHoId(hoId);
         await _thanhVienRepository.SaveChangesAsync();
 
         if (createdThanhVien.Data == null)
@@ -54,16 +56,15 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
         }
         var thanhVienResponse = new ThanhVienResponse
         {
-            Id = createdThanhVien.Data.Id,
-            HoTen = createdThanhVien.Data.HoTen,
-            Email = request.Email,
-    
-            NgaySinh = createdThanhVien.Data.NgaySinh ?? DateTime.MinValue,
-            NoiSinh = createdThanhVien.Data.NoiSinh ?? string.Empty,
-            ngayMat = createdThanhVien.Data.NgayMat,
-  
+           Id = createdThanhVien.Data.Id,
+           HoTen = createdThanhVien.Data.HoTen,
+            GioiTinh = createdThanhVien.Data.GioiTinh,
+            NgaySinh = createdThanhVien.Data.NgaySinh,
+            NoiSinh = createdThanhVien.Data.NoiSinh!,
             TieuSu = createdThanhVien.Data.TieuSu,
-          
+            ChiHoId = createdThanhVien.Data.ChiHoId,
+            TrangThai = createdThanhVien.Data.TrangThai,
+            HoId = createdThanhVien.Data.HoId
         };
 
         return Result<ThanhVienResponse>.Success(thanhVienResponse);
