@@ -1,9 +1,0 @@
-using GiaPha_Application.Common;
-using GiaPha_Application.DTOs;
-using MediatR;
-
-namespace GiaPha_Application.Features.HoName.Queries.GetThuyToHoById;
-public record GetThuyToHoByIdQuery : IRequest<Result<HoResponse>>
-{
-    public Guid ThuyToId { get; init; }
-}

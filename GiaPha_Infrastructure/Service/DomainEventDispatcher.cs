@@ -3,32 +3,42 @@ using System.Reflection;
 using GiaPha_Application.Events;
 using GiaPha_Domain.Common;
 using MediatR;
-
+using Microsoft.Extensions.Logging;
 
 namespace GiaPha_Infrastructure.Service
 {
     public class DomainEventDispatcher : IDomainEventDispatcher
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<DomainEventDispatcher> _logger;
         
         private static readonly ConcurrentDictionary<Type, Type?> _eventWrapperCache = new();
         
         private static readonly ConcurrentDictionary<Type, ConstructorInfo?> _constructorCache = new();
 
-        public DomainEventDispatcher(IMediator mediator)
+        public DomainEventDispatcher(IMediator mediator, ILogger<DomainEventDispatcher> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
          // Auto-discovery: Tự động tìm wrapper cho domain event
         public async Task DispatchAsync(IDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("🔍 [Dispatcher] Dispatch event: {EventType}", domainEvent.GetType().Name);
+            
             // 1. Tìm wrapper phù hợp ( UserRegistered → UserRegisteredEvent)
             var notification = CreateNotification(domainEvent);
             
             if (notification != null)
             {
-                  // 2. Publish qua MediatR
+                _logger.LogInformation("✅ [Dispatcher] Tìm thấy wrapper: {WrapperType}", notification.GetType().Name);
+                // 2. Publish qua MediatR
                 await _mediator.Publish(notification, cancellationToken);
+                _logger.LogInformation("📤 [Dispatcher] Đã publish event qua MediatR");
+            }
+            else
+            {
+                _logger.LogWarning("⚠️ [Dispatcher] KHÔNG tìm thấy wrapper cho event: {EventType}", domainEvent.GetType().Name);
             }
         }
         public async Task DispatchAllAsync(IEnumerable<IDomainEvent> domainEvents, CancellationToken cancellationToken = default)

@@ -13,7 +13,6 @@ namespace GiaPha_Infrastructure.Repository
         public async Task AddAsync(Notification notification)
         {
             _context.Notifications.Add(notification);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<Notification>> GetAllForUserAsync(Guid userId, Guid? chiHoId, Guid? hoId)
@@ -47,7 +46,6 @@ namespace GiaPha_Infrastructure.Repository
             if (notification != null)
             {
                 typeof(Notification).GetProperty("DaDoc")?.SetValue(notification, true);
-                await _context.SaveChangesAsync();
             }
         }
         public async Task<IReadOnlyList<Notification>> GetByChiHoIdAsync(Guid chiHoId)

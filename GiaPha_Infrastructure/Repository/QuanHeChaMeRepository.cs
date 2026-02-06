@@ -39,8 +39,5 @@ public class QuanHeChaMeRepository : IQuanHeChaMeRepository
             .AnyAsync(q => q.ChaMeId == conId && q.ConId == chaMeId);
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+
 }

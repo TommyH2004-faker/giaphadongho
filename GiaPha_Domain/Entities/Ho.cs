@@ -75,17 +75,15 @@ public class Ho : IHasDomainEvents
             DateTime.UtcNow
         ));
     }
-    // asssign thuy to
+    // Assign thủy tổ và raise domain event
     public void AssignThuyTo(Guid thanhVienId)
     {
         if (thanhVienId == Guid.Empty)
             throw new ArgumentException("ThanhVienId cannot be empty");
 
         ThuyToId = thanhVienId;
-    }
-    // raise event assign thuy to
-    public void RaiseAssignThuyToEvent(Guid thanhVienId)
-    {
+        
+        // ⚡ Raise Domain Event
         AddDomainEvent(new AssignedThuyToHoEvent(
             this.Id,
             thanhVienId,

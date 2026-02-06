@@ -9,12 +9,14 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
     private readonly IThanhVienRepository _thanhVienRepository;
     private readonly IChiHoRepository _chiHoRepository;
     private readonly IHoRepository _hoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository, IChiHoRepository chiHoRepository, IHoRepository hoRepository)
+    public CreateThanhVienHandle(IThanhVienRepository thanhVienRepository, IChiHoRepository chiHoRepository, IHoRepository hoRepository, IUnitOfWork unitOfWork)
     {
         _thanhVienRepository = thanhVienRepository;
         _chiHoRepository = chiHoRepository;
         _hoRepository = hoRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<ThanhVienResponse>> Handle(CreateThanhVienCommand request, CancellationToken cancellationToken)
@@ -48,7 +50,7 @@ public class CreateThanhVienHandle : IRequestHandler<CreateThanhVienCommand, Res
         // check hoid exists
         var createdThanhVien = await _thanhVienRepository.CreateThanhVienAsync(thanhVien);
         
-        await _thanhVienRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         if (createdThanhVien.Data == null)
         {

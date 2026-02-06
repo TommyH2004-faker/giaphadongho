@@ -9,8 +9,9 @@ import DangKyNguoiDung from './layout/User/DangKyNguoiDung';
 import KichHoatTaiKhoan from './layout/User/KichHoatTaiKhoan';
 import { ForgotPassword } from './layout/User/ForgotPassword';
 import HomePage from './layout/homepage/Homepage';
-import ChinhSach from './page/ChinhSach';
-import TinTuc from './page/TinTuc';
+import ChinhSach from './page/ChinhSach/ChinhSach';
+import TinTuc from './page/TinTuc/TinTuc';
+import { GiaPhaPage } from './page/GiaPha/GiaPhaPage';
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
                 <Routes>
                     {/* Trang chủ */}
                     <Route path='/' element={<HomePage />} />
+                    <Route path='/giapha' element={<GiaPhaPage />} />
                     <Route path='dangnhap' element={<DangNhap />} />
                     <Route path='dangky' element={<DangKyNguoiDung />} />
                     <Route path='policy' element={<ChinhSach />} />

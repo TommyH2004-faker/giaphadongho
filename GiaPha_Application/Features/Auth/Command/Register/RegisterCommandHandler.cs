@@ -11,11 +11,13 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
 {
     private readonly IAuthRepository authRepository;
     private readonly ILogger<RegisterCommandHandler> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RegisterCommandHandler(IAuthRepository authRepository , ILogger<RegisterCommandHandler> logger)
+    public RegisterCommandHandler(IAuthRepository authRepository , ILogger<RegisterCommandHandler> logger, IUnitOfWork unitOfWork)
     {
         this.authRepository = authRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<UserResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -28,7 +30,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
             }
 
             // Kiểm tra username đã tồn tại chưa
-            var existingUserByUsername = await authRepository.GetEmailByUsernameAsync(request.TenDangNhap);
+            var existingUserByUsername = await authRepository.GetUserByUsernameAsync(request.TenDangNhap);
             if (existingUserByUsername.Data != null)
             {
                 throw new InvalidOperationException("Username already exists");
@@ -51,10 +53,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Us
             // Lưu vào database
             await authRepository.AddUserAsync(newUser);
             
-            //  Raise event SAU khi đã lưu (có IdUser)
-            newUser.RaiseRegisteredEvent();
-            await authRepository.SaveChangesAsync();
-            _logger.LogInformation("Đã lưu notification hệ thống khi tạo thành viên mới.");
+            _logger.LogInformation("🔍 [Handler] Entity có {Count} domain events trước khi save", newUser.DomainEvents.Count);
+            
+            // Domain Event sẽ tự động được dispatch trong SaveChangesAsync()
+            _logger.LogInformation("💾 [Handler] Gọi UnitOfWork.SaveChangesAsync()...");
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation("✅ [Handler] Đã lưu notification hệ thống khi tạo thành viên mới.");
             return Result<UserResponse>.Success(
                 new UserResponse
                 {

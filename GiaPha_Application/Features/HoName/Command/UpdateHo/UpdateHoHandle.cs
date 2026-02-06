@@ -33,7 +33,7 @@ public class UpdateHoHandle : IRequestHandler<UpdateHoCommand, Result<HoResponse
         // Kiểm tra ThuyToId đã là thủy tổ của họ khác chưa
         if (request.ThuyToId.HasValue && request.ThuyToId.Value != Guid.Empty)
         {
-            var hoCoThuyTo = await _hoRepository.GetHoByThuyToIdAsync(request.ThuyToId.Value);
+            var hoCoThuyTo = await _hoRepository.GetHoByIdAsync(request.ThuyToId.Value);
             if (hoCoThuyTo != null && hoCoThuyTo.Data != null && ho.Data != null && hoCoThuyTo.Data.Id != ho.Data.Id)
             {
                 return Result<HoResponse>.Failure(

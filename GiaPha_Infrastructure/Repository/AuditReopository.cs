@@ -14,8 +14,7 @@ public class AuditReopository : IAuditLogRepository
     }   
     public async Task AddAsync(AuditLog auditLog)
     {
-        dbGiaPha.AuditLogs.Add(auditLog);
-        await dbGiaPha.SaveChangesAsync();
+      dbGiaPha.AuditLogs.Add(auditLog);
     }
 
     public async Task<IReadOnlyList<AuditLog>> GetAllAsync(int page = 1, int pageSize = 50)

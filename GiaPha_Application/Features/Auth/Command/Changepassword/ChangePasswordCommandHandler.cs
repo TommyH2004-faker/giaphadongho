@@ -11,10 +11,12 @@ namespace GiaPha_Application.Features.Auth.Command.Changepassword.ChangePassword
 public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand,Result<bool>>
 {
     private readonly IAuthRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ChangePasswordCommandHandler(IAuthRepository userRepository)
+    public ChangePasswordCommandHandler(IAuthRepository userRepository, IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<bool>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -42,15 +44,12 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
         // Hash mật khẩu mới
         var newPasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
 
-        // Thay đổi mật khẩu (domain method)
+        // Thay đổi mật khẩu (domain method sẽ tự động raise event)
         user.Data.ChangePassword(newPasswordHash);
-
-        // ⭐ Raise domain event
-        user.Data.RaisePasswordChangedEvent();
 
         // Lưu thay đổi và dispatch events
         await _userRepository.UpdateUserAsync(user.Data);
-        await _userRepository.SaveChangesAsync(); // Dispatch events
+        await _unitOfWork.SaveChangesAsync(); // ⚡ Events được dispatch tự động
 
         return Result<bool>.Success(true);
     }

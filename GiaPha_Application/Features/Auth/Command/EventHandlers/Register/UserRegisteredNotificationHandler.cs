@@ -27,6 +27,7 @@ namespace GiaPha_Application.Features.Auth.Command.EventHandlers.Register
 
         public async Task Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("🎯 [HANDLER] UserRegisteredNotificationHandler.Handle() được gọi!");
             _logger.LogInformation("📧 [USER] Gửi email xác thực cho user {Email}", notification.Email);
 
             // SỬA LẠI LINK KÍCH HOẠT - khớp với route /active/:code/:userId

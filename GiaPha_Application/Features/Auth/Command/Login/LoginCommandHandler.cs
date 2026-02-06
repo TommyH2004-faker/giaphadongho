@@ -25,7 +25,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
     public async Task<Result<LoginRespone>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         // user theo username
-        var userResult = await _authRepository.GetEmailByUsernameAsync(request.TenDangNhap);
+        var userResult = await _authRepository.GetUserByUsernameAsync(request.TenDangNhap);
         if (userResult.Data == null)
         {
             return Result<LoginRespone>.Failure(ErrorType.NotFound,"ACCOUNT_NOT_FOUND"); // Mã lỗi cụ thể

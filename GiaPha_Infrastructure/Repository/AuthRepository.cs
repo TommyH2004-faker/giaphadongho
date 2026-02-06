@@ -17,14 +17,12 @@ public class AuthRepository : IAuthRepository
     public async Task<Result<TaiKhoanNguoiDung>> AddUserAsync(TaiKhoanNguoiDung newUser)
     {
         _context.TaiKhoanNguoiDungs.Add(newUser);
-        await _context.SaveChangesAsync();
         return Result<TaiKhoanNguoiDung>.Success(newUser);
     }
 
     public async Task<Result<TaiKhoanNguoiDung>> CreateUserAsync(TaiKhoanNguoiDung user)
     {
         _context.TaiKhoanNguoiDungs.Add(user);
-        await _context.SaveChangesAsync();
         return Result<TaiKhoanNguoiDung>.Success(user);
     }
 
@@ -36,7 +34,6 @@ public class AuthRepository : IAuthRepository
             return Result<bool>.Failure(ErrorType.NotFound, "User not found");
         }
         _context.TaiKhoanNguoiDungs.Remove(user);
-        await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
     }
 
@@ -58,21 +55,18 @@ public class AuthRepository : IAuthRepository
         return Result<TaiKhoanNguoiDung?>.Success(user);
     }
 
-    public async Task<Result<TaiKhoanNguoiDung?>> GetEmailByUsernameAsync(string TenDangNhap)
+    public async Task<Result<TaiKhoanNguoiDung?>> GetUserByUsernameAsync(string TenDangNhap)
     {
         var user = await _context.TaiKhoanNguoiDungs.FirstOrDefaultAsync(u => u.TenDangNhap == TenDangNhap);
         return Result<TaiKhoanNguoiDung?>.Success(user);
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+   
 
     public async Task<Result<TaiKhoanNguoiDung>> UpdateUserAsync(TaiKhoanNguoiDung user)
     {
         _context.TaiKhoanNguoiDungs.Update(user);
-        await _context.SaveChangesAsync();
         return Result<TaiKhoanNguoiDung>.Success(user);
     }
+
 }

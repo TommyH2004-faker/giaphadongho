@@ -21,7 +21,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<GlobalExceptionFilter>();
-});
+})
+
+ .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization.ReferenceHandler.Preserve;
+
+        opt.JsonSerializerOptions.WriteIndented = true;
+    });
 #endregion
 
 
@@ -58,8 +66,12 @@ builder.Services.AddScoped<IAuditLogRepository, AuditReopository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IQuanHeChaMeRepository, QuanHeChaMeRepository>();
 builder.Services.AddScoped<IHonNhanRepository, HonNhanRepository>();
-#endregion
+builder.Services.AddScoped<IGiaPhaRepository, GiaPhaRepository>();
 
+// ✅ IUnitOfWork trỏ đến CÙNG instance DbGiaPha với repositories
+builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<DbGiaPha>());
+#endregion
+builder.Services.AddScoped<GiaPhaTreeBuilder>();
 #region MediatR + Pipeline + Validation
 builder.Services.AddMediatR(cfg =>
 {

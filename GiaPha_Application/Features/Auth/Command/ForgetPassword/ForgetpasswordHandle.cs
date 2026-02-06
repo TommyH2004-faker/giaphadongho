@@ -7,9 +7,11 @@ namespace GiaPha_Application.Features.Auth.Command.ForgetPassword;
 public class ForgetPasswordHandle : IRequestHandler<ForgetPasswordCommand, Result<bool>>
 {
     private readonly IAuthRepository _authRepository;
-    public ForgetPasswordHandle(IAuthRepository authRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public ForgetPasswordHandle(IAuthRepository authRepository, IUnitOfWork unitOfWork)
     {
         _authRepository = authRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<bool>> Handle(ForgetPasswordCommand request, CancellationToken cancellationToken)
     {   
@@ -25,14 +27,11 @@ public class ForgetPasswordHandle : IRequestHandler<ForgetPasswordCommand, Resul
     // 2. Băm mật khẩu
     var hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
-    // 3. Lưu mật khẩu mới
-    userResult.Data.ChangePassword(hashedPassword);
-
-    // 4. Raise event để gửi email
-    userResult.Data.RaiseForgotPasswordEvent(plainPassword);
+    // 3. Lưu mật khẩu mới (domain method sẽ tự động raise event)
+    userResult.Data.ForgotPassword(hashedPassword, plainPassword);
 
     await _authRepository.UpdateUserAsync(userResult.Data);
-    await _authRepository.SaveChangesAsync();
+    await _unitOfWork.SaveChangesAsync(); // Events được dispatch tự động
 
     return Result<bool>.Success(true);
     }

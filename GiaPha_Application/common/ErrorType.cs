@@ -10,6 +10,8 @@ namespace GiaPha_Application.Common
         Failure,
         NotActivated,
         WrongPassword,
-        DatabaseError
+        DatabaseError,
+        InternalError,
+        InternalServerError
     }
 }

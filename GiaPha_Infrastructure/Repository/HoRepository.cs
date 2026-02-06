@@ -29,7 +29,6 @@ public class HoRepository : IHoRepository
             return Result<bool>.Failure(ErrorType.NotFound, "Hộ không tồn tại");
         }
         _context.Hos.Remove(ho);
-        await _context.SaveChangesAsync();
         return Result<bool>.Success(true);   
     }
     public async Task<Result<Ho?>> GetHoByIdAsync(Guid hoId)
@@ -42,15 +41,25 @@ public class HoRepository : IHoRepository
         return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.TenHo == tenHo));
     }
 
+    // public async Task<Result<Ho?>> GetHoByThuyToIdAsync(Guid thuyToId)
+    // {
+    //     return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.ThuyToId == thuyToId));
+    // }
+    // ...existing code...
     public async Task<Result<Ho?>> GetHoByThuyToIdAsync(Guid thuyToId)
     {
-        return Result<Ho?>.Success(await _context.Hos.FirstOrDefaultAsync(h => h.ThuyToId == thuyToId));
+        var ho = await _context.Hos
+            .Include(h => h.ThuyTo)
+            .FirstOrDefaultAsync(h => h.ThuyToId == thuyToId);
+        
+        if (ho == null)
+            return Result<Ho?>.Failure(ErrorType.NotFound, "Không tìm thấy họ");
+        
+        return Result<Ho?>.Success(ho);
     }
-
     public async Task<Result<Ho>> UpdateHoAsync(Ho ho)
     {
         _context.Hos.Update(ho);
-        await _context.SaveChangesAsync();
         return Result<Ho>.Success(ho);
     }
 
@@ -69,7 +78,6 @@ public class HoRepository : IHoRepository
     {
         var ho = Ho.Create(tenHo, moTa, queQuan);
         _context.Hos.Add(ho);
-        await _context.SaveChangesAsync();
         return Result<Ho?>.Success(ho);
     }
 }

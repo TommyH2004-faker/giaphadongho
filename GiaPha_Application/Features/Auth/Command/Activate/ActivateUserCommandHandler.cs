@@ -6,10 +6,12 @@ namespace GiaPha_Application.Features.Auth.Command.Activate;
 public class ActivateUserCommandHandler : IRequestHandler<ActivateUserCommand, Result<bool>>
 {
     private readonly IAuthRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ActivateUserCommandHandler(IAuthRepository userRepository)
+    public ActivateUserCommandHandler(IAuthRepository userRepository, IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<bool>> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ public class ActivateUserCommandHandler : IRequestHandler<ActivateUserCommand, R
         user.Data.Activate();
 
         await _userRepository.UpdateUserAsync(user.Data);
-        await _userRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return Result<bool>.Success(true);
     }

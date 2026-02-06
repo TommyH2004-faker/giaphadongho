@@ -16,7 +16,6 @@ public class ThanhVienRepository : IThanhVienRepository
     public async Task<Result<ThanhVien?>> CreateThanhVienAsync(ThanhVien thanhVien)
     {
         _context.ThanhViens.Add(thanhVien);
-        await _context.SaveChangesAsync();
         return Result<ThanhVien?>.Success(thanhVien);
     }
 
@@ -28,7 +27,6 @@ public class ThanhVienRepository : IThanhVienRepository
             return Result<bool>.Failure(ErrorType.NotFound, "Thành viên không tồn tại");
         }
         _context.ThanhViens.Remove(thanhVien);
-        await _context.SaveChangesAsync();
         return Result<bool>.Success(true);
     }
 
@@ -60,10 +58,6 @@ public class ThanhVienRepository : IThanhVienRepository
        throw new NotImplementedException();
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
 
     public async Task<Result<ThanhVien>> UpdateThanhVienAsync(ThanhVien thanhVien)
     {
@@ -73,7 +67,6 @@ public class ThanhVienRepository : IThanhVienRepository
             return Result<ThanhVien>.Failure(ErrorType.NotFound, "Thành viên không tồn tại");
         }
         _context.ThanhViens.Update(thanhVien);
-        await _context.SaveChangesAsync();
         return Result<ThanhVien>.Success(thanhVien);
     }
 

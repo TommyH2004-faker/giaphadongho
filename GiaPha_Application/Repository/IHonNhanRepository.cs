@@ -11,5 +11,4 @@ public interface IHonNhanRepository
     Task<bool> IsBloodRelatedAsync(Guid nguoi1Id, Guid nguoi2Id);
     Task<Result<HonNhan>> GetByIdAsync(Guid id);
     Task<Result<HonNhan>> GetActiveMarriageAsync(Guid chongId, Guid voId);
-    Task SaveChangesAsync();
 }

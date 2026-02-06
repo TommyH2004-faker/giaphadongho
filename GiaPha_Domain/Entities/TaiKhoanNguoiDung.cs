@@ -56,24 +56,30 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
                 Enabled = false,
                 ActivationCode = activationCode
             };
+            
+            // ⚡ Raise Domain Event ngay trong factory method
+            user.AddDomainEvent(new UserRegistered(
+                user.Id,
+                user.Email,
+                user.TenDangNhap,
+                user.ActivationCode
+            ));
+            
             return user;
         }
-         public void RaiseRegisteredEvent()
-        {
-            AddDomainEvent(new UserRegistered(
-                this.Id,
-                this.Email,
-                this.TenDangNhap,
-                this.ActivationCode!
-            ));
-        }
-      
         public void ChangePassword(string newPasswordHash)
         {
             if (string.IsNullOrWhiteSpace(newPasswordHash))
                 throw new ArgumentException("PasswordHash required");
 
             MatKhau = newPasswordHash;
+            
+            // ⚡ Raise Domain Event
+            AddDomainEvent(new UserPasswordChanged(
+                this.Id,
+                this.Email,
+                DateTime.UtcNow
+            ));
         }
 
         public void Activate()
@@ -120,26 +126,14 @@ public class TaiKhoanNguoiDung :IHasDomainEvents
             DomainEventsInternal.Clear();
         }
 
-        public void RaisePasswordChangedEvent()
-        {
-            AddDomainEvent(new UserPasswordChanged(
-                this.Id,
-                this.Email,
-                DateTime.UtcNow
-            ));
-        }
-        public void ForgotPassword(string newPasswordHash)
+        public void ForgotPassword(string newPasswordHash, string plainPassword)
         {
             if (string.IsNullOrWhiteSpace(newPasswordHash))
                 throw new ArgumentException("New password hash required");
 
             MatKhau = newPasswordHash;
-        }
-        
-        
-        
-        public void RaiseForgotPasswordEvent(string plainPassword)
-        {
+            
+            // ⚡ Raise Domain Event
             AddDomainEvent(new UserForgotPassword(
                 this.Id,
                 this.Email,

@@ -62,8 +62,4 @@ public class HonNhanRepository : IHonNhanRepository
             : Result<HonNhan>.Failure(ErrorType.NotFound, "Hôn nhân không tồn tại hoặc đã kết thúc");
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
 }

@@ -8,5 +8,4 @@ public interface IQuanHeChaMeRepository
     Task<bool> ExistsAsync(Guid chaMeId, Guid conId, int loaiQuanHe);
     Task<int> CountParentAsync(Guid conId, int loaiQuanHe);
     Task<bool> IsLoopAsync(Guid chaMeId, Guid conId);
-    Task SaveChangesAsync();
 }

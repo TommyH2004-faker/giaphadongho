@@ -15,7 +15,7 @@ public class CheckExistUsernameHandler : IRequestHandler<CheckExistUsernameQuery
 
     public async Task<Result<bool>> Handle(CheckExistUsernameQuery request, CancellationToken cancellationToken)
     {
-        var user = await _authRepository.GetEmailByUsernameAsync(request.Username);
+        var user = await _authRepository.GetUserByUsernameAsync(request.Username);
         var exists = user.Data != null;
         return Result<bool>.Success(exists);
     }

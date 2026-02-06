@@ -7,10 +7,12 @@ namespace GiaPha_Application.Features.HoName.Command.AssignThuyTo;
 public class AssignThuyToHandle : IRequestHandler<AssignThuyToCommand, Result<HoResponse>>
 {
     private readonly IHoRepository _hoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AssignThuyToHandle(IHoRepository hoRepository)
+    public AssignThuyToHandle(IHoRepository hoRepository , IUnitOfWork unitOfWork)
     {
         _hoRepository = hoRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<HoResponse>> Handle(AssignThuyToCommand request, CancellationToken cancellationToken)
@@ -21,7 +23,7 @@ public class AssignThuyToHandle : IRequestHandler<AssignThuyToCommand, Result<Ho
             return Result<HoResponse>.Failure(ErrorType.NotFound, "Dữ liệu Họ không tồn tại");
         }
         // check thủy tổ đã được gán cho họ khác chưa
-        var hoWithThuyTo = await _hoRepository.GetHoByThuyToIdAsync(request.ThuyToId);
+        var hoWithThuyTo = await _hoRepository.GetHoByIdAsync(request.ThuyToId);
         if (hoWithThuyTo != null && hoWithThuyTo.Data != null && hoWithThuyTo.Data.Id != ho.Data.Id)
         {
             return Result<HoResponse>.Failure(
@@ -31,15 +33,13 @@ public class AssignThuyToHandle : IRequestHandler<AssignThuyToCommand, Result<Ho
         }
         ho.Data.AssignThuyTo(request.ThuyToId);
         
-        // ⚡ Raise domain event
-        ho.Data.RaiseAssignThuyToEvent(request.ThuyToId);
-
+        // ⚡ Domain Event sẽ tự động được dispatch trong SaveChangesAsync()
         var updatedHo = await _hoRepository.UpdateHoAsync(ho.Data);
         if (updatedHo == null || updatedHo.Data == null)
         {
             return Result<HoResponse>.Failure(ErrorType.NotFound, "Cập nhật Thủy Tổ cho Họ thất bại");
         } 
-     
+        await _unitOfWork.SaveChangesAsync();
 
 
         var hoResponse = new HoResponse

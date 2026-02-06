@@ -9,13 +9,16 @@ public class CreateHonNhanHandle : IRequestHandler<CreateHonNhanCommand, Result<
 {
     private readonly IHonNhanRepository _honNhanRepository;
     private readonly IThanhVienRepository _thanhVienRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateHonNhanHandle(
         IHonNhanRepository honNhanRepository,
-        IThanhVienRepository thanhVienRepository)
+        IThanhVienRepository thanhVienRepository,
+        IUnitOfWork unitOfWork)
     {
         _honNhanRepository = honNhanRepository;
         _thanhVienRepository = thanhVienRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<HonNhanResponse>> Handle(CreateHonNhanCommand request, CancellationToken cancellationToken)
@@ -75,7 +78,7 @@ public class CreateHonNhanHandle : IRequestHandler<CreateHonNhanCommand, Result<
             request.NgayKetHon);
 
         var created = await _honNhanRepository.CreateAsync(honNhan);
-        await _honNhanRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         if (created.Data == null)
             return Result<HonNhanResponse>.Failure(ErrorType.Validation, "Tạo hôn nhân thất bại.");

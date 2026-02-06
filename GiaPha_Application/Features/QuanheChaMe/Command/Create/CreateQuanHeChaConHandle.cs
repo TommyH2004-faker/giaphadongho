@@ -10,13 +10,16 @@ public class CreateQuanHeChaConHandle : IRequestHandler<CreateQuanHeChaConComman
 {
     private readonly IQuanHeChaMeRepository _quanHeChaConRepository;
     private readonly IThanhVienRepository _thanhVienRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateQuanHeChaConHandle(
         IQuanHeChaMeRepository quanHeChaConRepository,
-        IThanhVienRepository thanhVienRepository)
+        IThanhVienRepository thanhVienRepository,
+        IUnitOfWork unitOfWork)
     {
         _quanHeChaConRepository = quanHeChaConRepository;
         _thanhVienRepository = thanhVienRepository;
+        _unitOfWork = unitOfWork;
     }
 public async Task<Result<QuanHeChaConResponse>> Handle(CreateQuanHeChaConCommand request, CancellationToken cancellationToken)
 {
@@ -58,7 +61,7 @@ public async Task<Result<QuanHeChaConResponse>> Handle(CreateQuanHeChaConCommand
     // Tạo quan hệ
     var quanHe = GiaPha_Domain.Entities.QuanHeChaCon.Create(request.ChaMeId, request.ConId, request.LoaiQuanHe);
     var created = await _quanHeChaConRepository.CreateAsync(quanHe);
-    await _quanHeChaConRepository.SaveChangesAsync();
+    await _unitOfWork.SaveChangesAsync();
 
     if (created.Data == null)
         return Result<QuanHeChaConResponse>.Failure(ErrorType.Validation, "Tạo quan hệ cha con thất bại.");

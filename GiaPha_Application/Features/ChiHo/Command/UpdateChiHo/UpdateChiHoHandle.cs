@@ -8,9 +8,11 @@ namespace GiaPha_Application.Features.ChiHo.Command.UpdateChiHo;
 public class UpdateChiHoHandle : IRequestHandler<UpdateChiHoCommand, Result<ChiHoResponse>>
 {
     private readonly IChiHoRepository _chiHoRepository;
-    public UpdateChiHoHandle(IChiHoRepository chiHoRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public UpdateChiHoHandle(IChiHoRepository chiHoRepository, IUnitOfWork unitOfWork)
     {
         _chiHoRepository = chiHoRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<ChiHoResponse>> Handle(UpdateChiHoCommand request, CancellationToken cancellationToken)
     {
@@ -31,7 +33,7 @@ public class UpdateChiHoHandle : IRequestHandler<UpdateChiHoCommand, Result<ChiH
         }
         chiHo.Data.AssignTruongChi(truongChi.Data);
         await _chiHoRepository.UpdateChiHoAsync(chiHo.Data);
-        await _chiHoRepository.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         var chiHoResponse = new ChiHoResponse
         {
             Id = chiHo.Data.Id,

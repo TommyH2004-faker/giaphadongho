@@ -134,6 +134,9 @@ function Navbar() {
             <li className='nav-item'>
               <Link className='nav-link' to={"/policy"}>Chính sách</Link>
             </li>
+            <li className='nav-item'>
+              <NavLink className='nav-link' to={"/giapha"}>Gia phả</NavLink>
+            </li>
             {isToken() && (
             <li className='nav-item'>
                 <NavLink className='nav-link' to={"/feedback"}>

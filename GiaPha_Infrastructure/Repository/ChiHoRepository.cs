@@ -16,7 +16,6 @@ public class ChiHoRepository : IChiHoRepository
     public async Task<Result<ChiHo?>> CreateChiHoAsync(ChiHo chiHo)
     {
         _context.ChiHos.Add(chiHo);
-        await  _context.SaveChangesAsync();
         return Result<ChiHo?>.Success(chiHo);
     }
 
@@ -28,7 +27,7 @@ public class ChiHoRepository : IChiHoRepository
             return Result<bool>.Failure(ErrorType.NotFound, "Chi họ không tồn tại");
         }
         _context.ChiHos.Remove(chiHo);
-        await _context.SaveChangesAsync();
+
         return Result<bool>.Success(true);
     }
 
@@ -65,22 +64,16 @@ public class ChiHoRepository : IChiHoRepository
         return Result<ThanhVien>.Success(thanhVien);
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
 
     public async Task<Result<ChiHo>> Update(ChiHo chiHo)
     {
         _context.ChiHos.Update(chiHo);
-        await _context.SaveChangesAsync();
         return Result<ChiHo>.Success(chiHo);
     }
 
     public async Task<Result<ChiHo> > UpdateChiHoAsync(ChiHo chiHo)
     {
         _context.ChiHos.Update(chiHo);
-        await _context.SaveChangesAsync();
         return Result<ChiHo>.Success(chiHo);
     }
 }

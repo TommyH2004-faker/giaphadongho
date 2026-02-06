@@ -63,4 +63,15 @@ public class HoController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+    [HttpPost("{id}/assign-thuy-to/{thuyToId}")]
+    public async Task<IActionResult> AssignThuyTo(Guid id,  Guid thuyToId)
+    {
+        var command = new GiaPha_Application.Features.HoName.Command.AssignThuyTo.AssignThuyToCommand
+        {
+            HoId = id,
+            ThuyToId = thuyToId
+        };
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
 }   
